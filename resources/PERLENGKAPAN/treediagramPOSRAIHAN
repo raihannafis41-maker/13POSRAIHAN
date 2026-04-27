@@ -1,0 +1,236 @@
+CAFEPOS/
+│
+├── app/
+│   ├── Http/
+│   │   ├── Controllers/
+│   │   │   │
+│   │   │   ├── Auth/
+│   │   │   │   ├── ControllerAuthLoginHistory.php
+│   │   │   │   ├── ControllerAuthUser.php
+│   │   │   │   ├── ControllerAuthLogin.php
+│   │   │   │   └── ControllerAuthLogout.php
+│   │   │   │
+│   │   │   ├── Dashboard/
+│   │   │   │   ├── ControllerDashboardOwner.php
+│   │   │   │   ├── ControllerDashboardManager.php
+│   │   │   │   └── ControllerDashboardKasir.php
+│   │   │   │
+│   │   │   ├── Master/
+│   │   │   │   ├── ControllerUser.php
+│   │   │   │   ├── ControllerKategori.php
+│   │   │   │   ├── ControllerProduk.php
+│   │   │   │   ├── ControllerMeja.php
+│   │   │   │   ├── ControllerSupplier.php
+│   │   │   │   ├── ControllerMetodePembayaran.php
+│   │   │   │   ├── ControllerPromo.php
+│   │   │   │   └── ControllerPajak.php
+│   │   │   │
+│   │   │   ├── Transaksi/
+│   │   │   │   ├── ControllerPOS.php
+│   │   │   │   ├── ControllerPenjualan.php
+│   │   │   │   ├── ControllerDetailPenjualan.php
+│   │   │   │   ├── ControllerPembayaran.php
+│   │   │   │   ├── ControllerCetakStruk.php
+│   │   │   │   ├── ControllerVoid.php
+│   │   │   │   ├── ControllerRetur.php
+│   │   │   │   ├── ControllerShift.php
+│   │   │   │   └── ControllerReservasi.php
+│   │   │   │
+│   │   │   ├── Inventory/
+│   │   │   │   ├── ControllerStok.php
+│   │   │   │   ├── ControllerStokMasuk.php
+│   │   │   │   ├── ControllerStokKeluar.php
+│   │   │   │   ├── ControllerBahanBaku.php
+│   │   │   │   └── ControllerPembelian.php
+│   │   │   │
+│   │   │   ├── Laporan/
+│   │   │   │   ├── ControllerLaporan.php
+│   │   │   │   ├── ControllerLaporanHarian.php
+│   │   │   │   ├── ControllerLaporanBulanan.php
+│   │   │   │   ├── ControllerLaporanProduk.php
+│   │   │   │   ├── ControllerLaporanKasir.php
+│   │   │   │   ├── ControllerLaporanShift.php
+│   │   │   │   └── ControllerLaporanKeuntungan.php
+│   │   │   │
+│   │   │   ├── ZonaKasir/
+│   │   │   │   └── ControllerZonaKasir.php
+│   │   │   │
+│   │   │   └── Landing/
+│   │   │       └── ControllerLanding.php
+│   │   │
+│   │   └── Middleware/
+│   │       ├── MiddlewareOwner.php
+│   │       ├── MiddlewareManager.php
+│   │       ├── MiddlewareKasir.php
+│   │       └── RoleMiddleware.php
+│   │
+│   ├── Listener/
+│   │   └── LogSuccesfulLogin.php
+│   │
+│   ├── Models/
+│   │   ├── ModelUser.php
+│   │   ├── ModelKategori.php
+│   │   ├── ModelProduk.php
+│   │   ├── ModelMeja.php
+│   │   ├── ModelSupplier.php
+│   │   ├── ModelMetodePembayaran.php
+│   │   ├── ModelPromo.php
+│   │   ├── ModelPajak.php
+│   │   ├── ModelPenjualan.php
+│   │   ├── ModelDetailPenjualan.php
+│   │   ├── ModelPembayaran.php
+│   │   ├── ModelVoid.php
+│   │   ├── ModelRetur.php
+│   │   ├── ModelShift.php
+│   │   ├── ModelStok.php
+│   │   ├── ModelStokMasuk.php
+│   │   ├── ModelStokKeluar.php
+│   │   ├── ModelBahanBaku.php
+│   │   ├── ModelPembelian.php
+│   │   └── ModelLoginHistory.php
+│   │
+│   ├── Providers/
+│   │   ├── AppServiceProvider.php
+│   │   └── EventServiceProvider.php
+│   │
+│   └── Services/
+│       ├── StrukServices.php
+│       ├── LaporanServices.php
+│       ├── BarcodeServices.php
+│       └── ShiftServices.php
+│
+├── bootstrap/
+├── config/
+│
+├── database/
+│   ├── migrations/
+│   │   └── migrasicafepos.php
+│   │
+│   └── seeders/
+│       └── seedercafepos.php
+│
+├── public/
+│   ├── dist/              ← AdminLTE
+│   ├── plugins/
+│   ├── foto/
+│   │   ├── produk/
+│   │   ├── banner/
+│   │   └── user/
+│   ├── uploads/
+│   │   ├── struk/
+│   │   ├── retur/
+│   │   ├── laporan/
+│   │   └── bukti/
+│   └── index.php
+│
+├── resources/
+│   ├── views/
+│   │   │
+│   │   ├── layouts/
+│   │   │   ├── appowner.blade.php
+│   │   │   ├── appmanager.blade.php
+│   │   │   ├── appkasir.blade.php
+│   │   │   ├── appguest.blade.php
+│   │   │   │
+│   │   │   ├── owner/
+│   │   │   │   ├── navbar.blade.php
+│   │   │   │   ├── sidebar.blade.php
+│   │   │   │   └── footer.blade.php
+│   │   │   ├── manager/
+│   │   │   │   ├── navbar.blade.php
+│   │   │   │   ├── sidebar.blade.php
+│   │   │   │   └── footer.blade.php
+│   │   │   ├── kasir/
+│   │   │   │   ├── navbar.blade.php
+│   │   │   │   ├── sidebar.blade.php
+│   │   │   │   └── footer.blade.php
+│   │   │   └── guest/
+│   │   │       ├── navbar.blade.php
+│   │   │       └── footer.blade.php
+│   │   │
+│   │   ├── owner/
+│   │   │   ├── dashboard/
+│   │   │   │   └── dashboardowner.blade.php
+│   │   │   ├── user/
+│   │   │   ├── kategori/
+│   │   │   ├── produk/
+│   │   │   ├── meja/
+│   │   │   ├── supplier/
+│   │   │   ├── metodepembayaran/
+│   │   │   ├── promo/
+│   │   │   ├── pajak/
+│   │   │   └── laporan/
+│   │   │
+│   │   ├── manager/
+│   │   │   ├── dashboard/
+│   │   │   │   └── dashboardmanager.blade.php
+│   │   │   ├── produk/
+│   │   │   ├── stok/
+│   │   │   ├── retur/
+│   │   │   ├── diskon/
+│   │   │   ├── struk/
+│   │   │   └── laporanharian/
+│   │   │
+│   │   ├── kasir/
+│   │   │   ├── dashboard/
+│   │   │   │   └── dashboardkasir.blade.php
+│   │   │   ├── pos/
+│   │   │   │   ├── index.blade.php
+│   │   │   │   ├── pembayaran.blade.php
+│   │   │   │   ├── sukses.blade.php
+│   │   │   │   └── struk.blade.php
+│   │   │   ├── shift/
+│   │   │   │   ├── bukashift.blade.php
+│   │   │   │   └── tutupshift.blade.php
+│   │   │   └── riwayat/
+│   │   │
+│   │   ├── landing/
+│   │   │   ├── home.blade.php
+│   │   │   ├── menu.blade.php
+│   │   │   ├── promo.blade.php
+│   │   │   ├── tentang.blade.php
+│   │   │   └── kontak.blade.php
+│   │   │
+│   │   ├── auth/
+│   │   │   └── login.blade.php
+│   │   │
+│   │   └── errors/
+│   │       ├── 403.blade.php
+│   │       ├── 404.blade.php
+│   │       └── 500.blade.php
+│
+├── routes/
+│   └── web.php
+│
+├── storage/
+├── tests/
+└── .env
+
+
+ROLE USER
+│
+├── OWNER / ADMINISTRATOR
+│   ├── Full akses sistem
+│   ├── Kelola produk
+│   ├── Kelola stok
+│   ├── Kelola user
+│   ├── Semua laporan
+│   ├── Void transaksi
+│   └── Setting pembayaran
+│
+├── MANAGER / SUPERVISOR
+│   ├── POS transaksi
+│   ├── Restock barang
+│   ├── Approve diskon
+│   ├── Retur barang
+│   ├── Cetak ulang struk
+│   ├── Laporan harian
+│   └── Void dengan PIN
+│
+└── KASIR
+    ├── POS transaksi
+    ├── Scan barcode
+    ├── Pembayaran tunai/non tunai
+    ├── Cetak struk
+    ├── Buka shift
+    └── Tutup shift
