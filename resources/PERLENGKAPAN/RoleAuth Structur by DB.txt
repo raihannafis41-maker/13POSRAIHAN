@@ -1,0 +1,65 @@
+BREAKDOWN STRUKTUR ROUTE AUTHENTIKASI BY DATABASE =>SIMASBUK (Sistem Informasi MASjid Beribadah Umat dan Kemaslahatan bersama)
+
+Controllers/auth/authloginuser -> middleware/midlewareuser -> /loginuser
+Controllers/auth/authloginuser -> middleware/midlewaremember -> /loginmember
+
+[Middleware user (admin+staff)]
+└───*dashboarduser (dashboardadmin + dashboardstaff) = staff tidak bisa mengelola user samasekali baik di dashboard,navbar,maupun sidebar
+└───*event master
+    └──/event (id,name,detail)
+└───*address master
+    └──/address (id,street,hamlet,village,district,regency,province,postalcode,country)
+└───*user division
+    ├──/roleuser (id,name) -> name seeding by: admin,opperator,bendahara
+    └──/user (id,idrole,name,username,password,statusmember(active,nonactive),idadress,photo)
+└───*member division
+    ├──/categorymember (id,name) -> name seeding by: fakir,miskin,menengah,mampu 
+    └──/member (id,idadress,name,username,password,statusacceptance(pending,accepted,rejected),statusmember(active,nonactive),idadress,photo)
+└───*employee division
+    ├──/position (id,name) -> seeding by: ketua,wakil ketua,bendahara,sekretaris,dll
+    └──/employee (id,name,username,password,statusacceptance(pending,accepted,rejected),statusmember(active,nonactive),idadress,photo)
+└───*salary division
+    ├──/salary (id,name,amount) -> name seeding by: harian, bulanan, borongan
+    ├──/paid (id,iduser,idmember,totalcostfined)
+    └──/paiddetail (id,idpaid,idequipment,datepaid,datereturn,late,idfined,costfined)
+└───*fasility division
+    ├──/merk (id,name)
+    ├──/fined (id,name,cost)
+    ├──/building (id,name)
+    ├──/room (id,name,idbuilding)
+    ├──/equipment (id,name,idroom,quantity)
+    ├──/lending (id,iduser,idmember,totalcostfined)
+    └──/lendingdetail (id,idlending,idequipment,datelending,datereturn,late,idfined,costfined)
+└───*letter division
+    ├──/lettertype (id,name) -> seeding by: surat pemberhentian,surat keputusan kegiatan,surat kuasa,surat undangan,surat keterangan
+    ├──/lettering (id,idmember,iduser,idemployee,totalletter)
+    ├──/letteringdetail (id,idlettering,idlettertype,datesign)
+    ├──/letterkind (id,name) -> seeding by: surat masuk,surat keluar (semua surat yang dibuat di apk ini adalah surat masuk)
+    └──/lettermanagement (id,idlettering,idlettertype,idletterkind,disposition,filetypes(photo,doc,pdf),file)
+└───*cash division =>create by event/program
+    ├──/cash (id,iduser,idemployee,idmember,idevent,cashname,status(finished,onprocess),total)
+    └──/cashdetail (idcash,paymentstatus(paid,pending))
+└───*bazis division =>create by event/program
+    ├──/bazis (id,iduser,idemployee,idmember,idevent,bazisname,status(finished,onprocess),total)
+    └──/bazisdetail (idbazis,paymentstatus(paid,pending))
+└───*shalat division
+    ├──/shalat (id,iduser,idevent,bazisname,status(finished,onprocess),total)
+    └──/shalatdetail (id,idshalat,idemployee)
+└───*qurban division
+    ├──/qurban (id,iduser,idemployee,idmember,idevent,sholatname,status(finished,onprocess),total)
+    └──/qurbandetail (id,idqurban,idemployee)
+└───*donation division
+    ├──/donation (id,iduser,idemployee,idmember,idevent,donationname,status(finished,onprocess),total)
+    └──/donationdetail (id,iddonation,idemployee)
+└───*publication division
+    ├──/article
+    └──/comment
+
+[Middleware member]
+├───/dashboardmember => 2 bagian yaitu atas (ringkasan card) dan bawah (ringkasan tabulasi 6 terakhir) terkait letter,qurban,bazis,shalat,donasi yang pernah dilakukan
+├───/letterhistory => index (seluruh daftar surat yang pernah dibuat), create (halaman untuk melakukan pengajuan surat), edit (halaman mengedit dari daftar surat yang diajukan), show melihat tampilan suratnya
+├───/qurbanhistory => index (seluruh daftar qurban yang pernah dibuat), create (halaman untuk melakukan pengajuan qurban), edit (halaman mengedit dari daftar qurban yang diajukan), show melihat tampilan qurbannya
+├───/bazishistory => index (seluruh daftar bazis yang pernah dibuat), create (halaman untuk melakukan pengajuan bazis), edit (halaman mengedit dari daftar bazis yang diajukan), show melihat tampilan bazisnya
+├───/shalathistory => index (seluruh daftar shalat yang pernah dibuat), create (halaman untuk melakukan pengajuan shalat), edit (halaman mengedit dari daftar shalat yang diajukan), show melihat tampilan shalatnya
+├───/adddonationhistory => index (seluruh daftar tambahdonasi yang pernah dibuat), create (halaman untuk melakukan pengajuan tambahdonasi), edit (halaman mengedit dari daftar tambahdonasi yang diajukan), show melihat tampilan tambahdonasinya
+└───/getdonationhistory => index (seluruh daftar terimadonasi yang pernah dibuat), create (halaman untuk melakukan pengajuan terimadonasi), edit (halaman mengedit dari daftar terimadonasi yang diajukan), show melihat tampilan terimadonasinya

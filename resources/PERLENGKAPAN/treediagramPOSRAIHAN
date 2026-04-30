@@ -7,8 +7,6 @@ CAFEPOS/
 │   │   │   ├── Auth/
 │   │   │   │   ├── ControllerAuthLoginHistory.php
 │   │   │   │   ├── ControllerAuthUser.php
-│   │   │   │   ├── ControllerAuthLogin.php
-│   │   │   │   └── ControllerAuthLogout.php
 │   │   │   │
 │   │   │   ├── Dashboard/
 │   │   │   │   ├── ControllerDashboardOwner.php
@@ -25,23 +23,19 @@ CAFEPOS/
 │   │   │   │   ├── ControllerPromo.php
 │   │   │   │   └── ControllerPajak.php
 │   │   │   │
-│   │   │   ├── Transaksi/
-│   │   │   │   ├── ControllerPOS.php
-│   │   │   │   ├── ControllerPenjualan.php
-│   │   │   │   ├── ControllerDetailPenjualan.php
-│   │   │   │   ├── ControllerPembayaran.php
-│   │   │   │   ├── ControllerCetakStruk.php
-│   │   │   │   ├── ControllerVoid.php
-│   │   │   │   ├── ControllerRetur.php
-│   │   │   │   ├── ControllerShift.php
-│   │   │   │   └── ControllerReservasi.php
-│   │   │   │
 │   │   │   ├── Inventory/
 │   │   │   │   ├── ControllerStok.php
 │   │   │   │   ├── ControllerStokMasuk.php
 │   │   │   │   ├── ControllerStokKeluar.php
 │   │   │   │   ├── ControllerBahanBaku.php
 │   │   │   │   └── ControllerPembelian.php
+│   │   │   │
+│   │   │   ├── Transaksi/
+│   │   │   │   ├── ControllerPenjualan.php
+│   │   │   │   ├── ControllerCetakStruk.php
+│   │   │   │   ├── ControllerVoid.php
+│   │   │   │   ├── ControllerRetur.php
+│   │   │   │   ├── ControllerShift.php
 │   │   │   │
 │   │   │   ├── Laporan/
 │   │   │   │   ├── ControllerLaporan.php
@@ -59,10 +53,7 @@ CAFEPOS/
 │   │   │       └── ControllerLanding.php
 │   │   │
 │   │   └── Middleware/
-│   │       ├── MiddlewareOwner.php
-│   │       ├── MiddlewareManager.php
-│   │       ├── MiddlewareKasir.php
-│   │       └── RoleMiddleware.php
+│   │       └── RoleMiddleware.php (login sebagai owner/manager/kasir) 
 │   │
 │   ├── Listener/
 │   │   └── LogSuccesfulLogin.php
@@ -127,16 +118,11 @@ CAFEPOS/
 │   ├── views/
 │   │   │
 │   │   ├── layouts/
-│   │   │   ├── appowner.blade.php
-│   │   │   ├── appmanager.blade.php
+│   │   │   ├── appadmin.blade.php
 │   │   │   ├── appkasir.blade.php
 │   │   │   ├── appguest.blade.php
 │   │   │   │
-│   │   │   ├── owner/
-│   │   │   │   ├── navbar.blade.php
-│   │   │   │   ├── sidebar.blade.php
-│   │   │   │   └── footer.blade.php
-│   │   │   ├── manager/
+│   │   │   ├── admin/
 │   │   │   │   ├── navbar.blade.php
 │   │   │   │   ├── sidebar.blade.php
 │   │   │   │   └── footer.blade.php
@@ -148,7 +134,7 @@ CAFEPOS/
 │   │   │       ├── navbar.blade.php
 │   │   │       └── footer.blade.php
 │   │   │
-│   │   ├── owner/
+│   │   ├── admin/
 │   │   │   ├── dashboard/
 │   │   │   │   └── dashboardowner.blade.php
 │   │   │   ├── user/
@@ -161,15 +147,6 @@ CAFEPOS/
 │   │   │   ├── pajak/
 │   │   │   └── laporan/
 │   │   │
-│   │   ├── manager/
-│   │   │   ├── dashboard/
-│   │   │   │   └── dashboardmanager.blade.php
-│   │   │   ├── produk/
-│   │   │   ├── stok/
-│   │   │   ├── retur/
-│   │   │   ├── diskon/
-│   │   │   ├── struk/
-│   │   │   └── laporanharian/
 │   │   │
 │   │   ├── kasir/
 │   │   │   ├── dashboard/
@@ -209,7 +186,7 @@ CAFEPOS/
 
 ROLE USER
 │
-├── OWNER / ADMINISTRATOR
+├── Admin
 │   ├── Full akses sistem
 │   ├── Kelola produk
 │   ├── Kelola stok
@@ -217,15 +194,6 @@ ROLE USER
 │   ├── Semua laporan
 │   ├── Void transaksi
 │   └── Setting pembayaran
-│
-├── MANAGER / SUPERVISOR
-│   ├── POS transaksi
-│   ├── Restock barang
-│   ├── Approve diskon
-│   ├── Retur barang
-│   ├── Cetak ulang struk
-│   ├── Laporan harian
-│   └── Void dengan PIN
 │
 └── KASIR
     ├── POS transaksi
