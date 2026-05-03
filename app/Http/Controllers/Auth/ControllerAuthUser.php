@@ -29,17 +29,22 @@ class ControllerAuthUser extends Controller
 
             $request->session()->regenerate();
 
-            // redirect berdasarkan role
-            if (Auth::user()->role == 'owner') {
+            $role = Auth::user()->role;
+
+            if ($role == 'owner') {
                 return redirect('/dashboardowner')->with('success', 'Login berhasil sebagai Owner');
-            } elseif (Auth::user()->role == 'manager') {
-                return redirect('/dashboardmanager')->with('success', 'Login berhasil sebagai Manager');
-            } elseif (Auth::user()->role == 'kasir') {
-                return redirect('/dashboardkasir')->with('success', 'Login berhasil sebagai Kasir');
-            } else {
-                Auth::logout();
-                return redirect('/login')->with('error', 'Role tidak valid!');
             }
+
+            if ($role == 'manager') {
+                return redirect('/dashboardmanager')->with('success', 'Login berhasil sebagai Manager');
+            }
+
+            if ($role == 'kasir') {
+                return redirect('/dashboardkasir')->with('success', 'Login berhasil sebagai Kasir');
+            }
+
+            Auth::logout();
+            return redirect('/login')->with('error', 'Role tidak valid!');
         }
 
         return redirect('/login')->with('error', 'Username atau Password salah!');

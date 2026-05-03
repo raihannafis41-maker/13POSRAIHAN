@@ -51,7 +51,7 @@ CAFEPOS/
 │   │   │       └── ControllerLanding.php
 │   │   │
 │   │   └── Middleware/
-│   │       └── RoleMiddleware.php (login sebagai owner/manager/kasir) 
+│   │       └── RoleMiddleware.php
 │   │
 │   ├── Listener/
 │   │   └── LogSuccesfulLogin.php
@@ -86,30 +86,6 @@ CAFEPOS/
 │       ├── BarcodeServices.php
 │       └── ShiftServices.php
 │
-├── bootstrap/
-├── config/
-│
-├── database/
-│   ├── migrations/
-│   │   └── migrasicafepos.php
-│   │
-│   └── seeders/
-│       └── seedercafepos.php
-│
-├── public/
-│   ├── dist/              ← AdminLTE
-│   ├── plugins/
-│   ├── foto/              ← AdminLTE
-│   │   ├── produk/
-│   │   ├── banner/
-│   │   └── user/
-│   ├── uploads/
-│   │   ├── struk/
-│   │   ├── retur/
-│   │   ├── laporan/
-│   │   └── bukti/
-│   └── index.php
-│
 ├── resources/
 │   ├── views/
 │   │   │
@@ -122,10 +98,12 @@ CAFEPOS/
 │   │   │   │   ├── navbar.blade.php
 │   │   │   │   ├── sidebar.blade.php
 │   │   │   │   └── footer.blade.php
+│   │   │   │
 │   │   │   ├── kasir/
 │   │   │   │   ├── navbar.blade.php
 │   │   │   │   ├── sidebar.blade.php
 │   │   │   │   └── footer.blade.php
+│   │   │   │
 │   │   │   └── guest/
 │   │   │       ├── navbar.blade.php
 │   │   │       └── footer.blade.php
@@ -133,16 +111,91 @@ CAFEPOS/
 │   │   ├── admin/
 │   │   │   ├── dashboard/
 │   │   │   │   └── dashboardadmin.blade.php
+│   │   │   │
 │   │   │   ├── user/
+│   │   │   │   ├── index.blade.php
+│   │   │   │   ├── create.blade.php
+│   │   │   │   ├── edit.blade.php
+│   │   │   │   └── show.blade.php
+│   │   │   │
 │   │   │   ├── kategori/
+│   │   │   │   ├── index.blade.php
+│   │   │   │   ├── create.blade.php
+│   │   │   │   ├── edit.blade.php
+│   │   │   │   └── show.blade.php
+│   │   │   │
 │   │   │   ├── produk/
+│   │   │   │   ├── index.blade.php
+│   │   │   │   ├── create.blade.php
+│   │   │   │   ├── edit.blade.php
+│   │   │   │   └── show.blade.php
+│   │   │   │
 │   │   │   ├── meja/
+│   │   │   │   ├── index.blade.php
+│   │   │   │   ├── create.blade.php
+│   │   │   │   ├── edit.blade.php
+│   │   │   │   └── show.blade.php
+│   │   │   │
 │   │   │   ├── supplier/
+│   │   │   │   ├── index.blade.php
+│   │   │   │   ├── create.blade.php
+│   │   │   │   ├── edit.blade.php
+│   │   │   │   └── show.blade.php
+│   │   │   │
 │   │   │   ├── metodepembayaran/
+│   │   │   │   ├── index.blade.php
+│   │   │   │   ├── create.blade.php
+│   │   │   │   ├── edit.blade.php
+│   │   │   │   └── show.blade.php
+│   │   │   │
 │   │   │   ├── promo/
+│   │   │   │   ├── index.blade.php
+│   │   │   │   ├── create.blade.php
+│   │   │   │   ├── edit.blade.php
+│   │   │   │   └── show.blade.php
+│   │   │   │
 │   │   │   ├── pajak/
-│   │   │   └── laporan/
-│   │   │
+│   │   │   │   ├── index.blade.php
+│   │   │   │   ├── create.blade.php
+│   │   │   │   ├── edit.blade.php
+│   │   │   │   └── show.blade.php
+│   │   │   │
+│   │   │   ├── laporan/
+│   │   │   │   ├── index.blade.php
+│   │   │   │   ├── create.blade.php
+│   │   │   │   ├── edit.blade.php
+│   │   │   │   └── show.blade.php
+│   │   │   │
+│   │   │   └── inventory/    (INI YANG DITAMBAHKAN)
+│   │   │       ├── bahanbaku/
+│   │   │       │   ├── index.blade.php
+│   │   │       │   ├── create.blade.php
+│   │   │       │   ├── edit.blade.php
+│   │   │       │   └── show.blade.php
+│   │   │       │
+│   │   │       ├── stok/
+│   │   │       │   ├── index.blade.php
+│   │   │       │   ├── create.blade.php
+│   │   │       │   ├── edit.blade.php
+│   │   │       │   └── show.blade.php
+│   │   │       │
+│   │   │       ├── stokmasuk/
+│   │   │       │   ├── index.blade.php
+│   │   │       │   ├── create.blade.php
+│   │   │       │   ├── edit.blade.php
+│   │   │       │   └── show.blade.php
+│   │   │       │
+│   │   │       ├── stokkeluar/
+│   │   │       │   ├── index.blade.php
+│   │   │       │   ├── create.blade.php
+│   │   │       │   ├── edit.blade.php
+│   │   │       │   └── show.blade.php
+│   │   │       │
+│   │   │       └── pembelian/
+│   │   │           ├── index.blade.php
+│   │   │           ├── create.blade.php
+│   │   │           ├── edit.blade.php
+│   │   │           └── show.blade.php
 │   │   │
 │   │   ├── kasir/
 │   │   │   ├── dashboard/
@@ -175,26 +228,4 @@ CAFEPOS/
 ├── routes/
 │   └── web.php
 │
-├── storage/
-├── tests/
 └── .env
-
-
-ROLE USER
-│
-├── Admin
-│   ├── Full akses sistem
-│   ├── Kelola produk
-│   ├── Kelola stok
-│   ├── Kelola user
-│   ├── Semua laporan
-│   ├── Void transaksi
-│   └── Setting pembayaran
-│
-└── KASIR
-    ├── POS transaksi
-    ├── Scan barcode
-    ├── Pembayaran tunai/non tunai
-    ├── Cetak struk
-    ├── Buka shift
-    └── Tutup shift

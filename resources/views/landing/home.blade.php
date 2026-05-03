@@ -46,7 +46,7 @@
             </div>
 
             <div class="col-lg-6 text-center" data-aos="fade-left">
-                <img src="{{ asset('foto/banner/hero.png') }}" class="img-fluid rounded-4 shadow-lg" alt="CAFEPOS Hero">
+                <img src="{{ asset('foto/banner/hanla.JPEG') }}" class="img-fluid rounded-4 shadow-lg" alt="CAFEPOS Hero">
             </div>
 
         </div>
