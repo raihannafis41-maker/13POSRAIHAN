@@ -1,212 +1,142 @@
-@extends('layouts.appadmin')
+<?php
 
-@section('title', 'Dashboard Admin')
+namespace App\Http\Controllers\Dashboard;
 
-@section('content')
-<div class="content-wrapper">
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
-    <!-- Content Header -->
-    <section class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-2 align-items-center">
-                <div class="col-sm-6">
-                    <h1>Dashboard Admin</h1>
-                </div>
-                <div class="col-sm-6 text-right">
-                    <small class="text-muted">CAFEPOS - Sistem Kasir Cafe</small>
-                </div>
-            </div>
-        </div>
-    </section>
+// MODELS
+use App\Models\ModelProduk;
+use App\Models\ModelKategori;
+use App\Models\ModelMeja;
+use App\Models\ModelUser;
+use App\Models\ModelShift;
+use App\Models\ModelStok;
+use App\Models\ModelPenjualan;
 
-    <!-- Main content -->
-    <section class="content">
-        <div class="container-fluid">
+class ControllerDashboardManager extends Controller
+{
+    public function index()
+    {
+        /*
+        |----------------------------------------------------------------------
+        | TOTAL PRODUK
+        |----------------------------------------------------------------------
+        */
+        $totalProduk = ModelProduk::count();
 
-            <!-- Info Box -->
-            <div class="row">
+        /*
+        |----------------------------------------------------------------------
+        | TOTAL KATEGORI
+        |----------------------------------------------------------------------
+        */
+        $totalKategori = ModelKategori::count();
 
-                <!-- Total Produk -->
-                <div class="col-lg-3 col-6">
-                    <div class="small-box bg-info">
-                        <div class="inner">
-                            <h3>{{ $totalProduk ?? 0 }}</h3>
-                            <p>Total Produk</p>
-                        </div>
-                        <div class="icon">
-                            <i class="fas fa-coffee"></i>
-                        </div>
-                        <a href="#" class="small-box-footer">
-                            Lihat Produk <i class="fas fa-arrow-circle-right"></i>
-                        </a>
-                    </div>
-                </div>
+        /*
+        |----------------------------------------------------------------------
+        | TOTAL MEJA
+        |----------------------------------------------------------------------
+        */
+        $totalMeja = ModelMeja::count();
 
-                <!-- Total Kategori -->
-                <div class="col-lg-3 col-6">
-                    <div class="small-box bg-success">
-                        <div class="inner">
-                            <h3>{{ $totalKategori ?? 0 }}</h3>
-                            <p>Total Kategori</p>
-                        </div>
-                        <div class="icon">
-                            <i class="fas fa-list"></i>
-                        </div>
-                        <a href="#" class="small-box-footer">
-                            Lihat Kategori <i class="fas fa-arrow-circle-right"></i>
-                        </a>
-                    </div>
-                </div>
+        /*
+        |----------------------------------------------------------------------
+        | TOTAL KASIR
+        |----------------------------------------------------------------------
+        */
+        $totalKasir = ModelUser::where('role', 'kasir')->count();
 
-                <!-- Total Meja -->
-                <div class="col-lg-3 col-6">
-                    <div class="small-box bg-warning">
-                        <div class="inner">
-                            <h3>{{ $totalMeja ?? 0 }}</h3>
-                            <p>Total Meja</p>
-                        </div>
-                        <div class="icon">
-                            <i class="fas fa-chair"></i>
-                        </div>
-                        <a href="#" class="small-box-footer">
-                            Lihat Meja <i class="fas fa-arrow-circle-right"></i>
-                        </a>
-                    </div>
-                </div>
+        /*
+        |----------------------------------------------------------------------
+        | SHIFT AKTIF (OPEN)
+        |----------------------------------------------------------------------
+        */
+        $shiftAktif = ModelShift::where('status', 'open')->count();
 
-                <!-- Total User -->
-                <div class="col-lg-3 col-6">
-                    <div class="small-box bg-danger">
-                        <div class="inner">
-                            <h3>{{ $totalUser ?? 0 }}</h3>
-                            <p>Total User</p>
-                        </div>
-                        <div class="icon">
-                            <i class="fas fa-users"></i>
-                        </div>
-                        <a href="#" class="small-box-footer">
-                            Lihat User <i class="fas fa-arrow-circle-right"></i>
-                        </a>
-                    </div>
-                </div>
+        /*
+        |----------------------------------------------------------------------
+        | TRANSAKSI HARI INI
+        |----------------------------------------------------------------------
+        */
+        $penjualanHariIni = ModelPenjualan::whereDate('tanggalpenjualan', now()->toDateString())
+            ->count();
 
-            </div>
+        /*
+        |----------------------------------------------------------------------
+        | PENDAPATAN HARI INI (TOTAL PENJUALAN PAID)
+        |----------------------------------------------------------------------
+        */
+        $pendapatanHariIni = ModelPenjualan::whereDate('tanggalpenjualan', now()->toDateString())
+            ->where('status', 'paid')
+            ->sum('total');
 
-            <!-- Ringkasan -->
-            <div class="row">
+        /*
+        |----------------------------------------------------------------------
+        | PENDAPATAN BULAN INI
+        |----------------------------------------------------------------------
+        */
+        $pendapatanBulanIni = ModelPenjualan::whereMonth('tanggalpenjualan', now()->month)
+            ->whereYear('tanggalpenjualan', now()->year)
+            ->where('status', 'paid')
+            ->sum('total');
 
-                <!-- Penjualan Hari Ini -->
-                <div class="col-md-6">
-                    <div class="card card-primary card-outline">
-                        <div class="card-header">
-                            <h3 class="card-title">
-                                <i class="fas fa-chart-line"></i> Ringkasan Penjualan Hari Ini
-                            </h3>
-                        </div>
-                        <div class="card-body">
-                            <p><b>Total Transaksi:</b> {{ $transaksiHariIni ?? 0 }}</p>
-                            <p><b>Total Pendapatan:</b> Rp {{ number_format($pendapatanHariIni ?? 0, 0, ',', '.') }}</p>
-                            <p><b>Total Diskon:</b> Rp {{ number_format($diskonHariIni ?? 0, 0, ',', '.') }}</p>
-                            <p><b>Total Pajak:</b> Rp {{ number_format($pajakHariIni ?? 0, 0, ',', '.') }}</p>
-                        </div>
-                    </div>
-                </div>
+        /*
+        |----------------------------------------------------------------------
+        | PRODUK TERLARIS (TOP 5 HARI INI)
+        |----------------------------------------------------------------------
+        | FIX AMBIGUOUS COLUMN: gunakan detailpenjualan.subtotal
+        */
+        $produkTerlaris = DB::table('detailpenjualan')
+            ->join('penjualan', 'detailpenjualan.penjualanid', '=', 'penjualan.id')
+            ->join('produk', 'detailpenjualan.produkid', '=', 'produk.id')
+            ->whereDate('penjualan.tanggalpenjualan', now()->toDateString())
+            ->where('penjualan.status', 'paid')
+            ->select(
+                'detailpenjualan.produkid',
+                'produk.namaproduk',
+                DB::raw('SUM(detailpenjualan.qty) as total_qty'),
+                DB::raw('SUM(detailpenjualan.subtotal) as total_pendapatan')
+            )
+            ->groupBy('detailpenjualan.produkid', 'produk.namaproduk')
+            ->orderByDesc('total_qty')
+            ->limit(5)
+            ->get();
 
-                <!-- Shift Aktif -->
-                <div class="col-md-6">
-                    <div class="card card-success card-outline">
-                        <div class="card-header">
-                            <h3 class="card-title">
-                                <i class="fas fa-user-clock"></i> Shift Aktif
-                            </h3>
-                        </div>
-                        <div class="card-body">
-                            @if(isset($shiftAktif) && $shiftAktif)
-                                <p>
-                                    <b>Kasir:</b>
-                                    {{ $shiftAktif->user->name ?? 'Kasir Tidak Diketahui' }}
-                                </p>
+        /*
+        |----------------------------------------------------------------------
+        | STOK MENIPIS
+        |----------------------------------------------------------------------
+        | stoktersedia <= stokminimal
+        */
+        $stokMenipis = DB::table('stok')
+            ->join('bahanbaku', 'stok.bahanbakuid', '=', 'bahanbaku.id')
+            ->whereColumn('stok.stoktersedia', '<=', 'stok.stokminimal')
+            ->select(
+                'stok.id',
+                'bahanbaku.namabahan',
+                'stok.stoktersedia',
+                'stok.stokminimal'
+            )
+            ->orderBy('stok.stoktersedia', 'asc')
+            ->get();
 
-                                <p>
-                                    <b>Shift Mulai:</b>
-                                    {{ $shiftAktif->shiftmulai ? \Carbon\Carbon::parse($shiftAktif->shiftmulai)->format('d-m-Y H:i') : '-' }}
-                                </p>
-
-                                <p>
-                                    <b>Saldo Awal:</b>
-                                    Rp {{ number_format($shiftAktif->saldoawal ?? 0, 0, ',', '.') }}
-                                </p>
-
-                                <p>
-                                    <b>Status:</b>
-                                    <span class="badge badge-success">OPEN</span>
-                                </p>
-                            @else
-                                <p class="text-muted">Tidak ada shift yang sedang aktif.</p>
-                            @endif
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- Quick Menu -->
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="card card-secondary card-outline">
-                        <div class="card-header">
-                            <h3 class="card-title">
-                                <i class="fas fa-cogs"></i> Quick Access
-                            </h3>
-                        </div>
-                        <div class="card-body">
-                            <div class="row text-center">
-
-                                <div class="col-md-2 col-6 mb-3">
-                                    <a href="#" class="btn btn-app bg-info">
-                                        <i class="fas fa-coffee"></i> Produk
-                                    </a>
-                                </div>
-
-                                <div class="col-md-2 col-6 mb-3">
-                                    <a href="#" class="btn btn-app bg-success">
-                                        <i class="fas fa-list"></i> Kategori
-                                    </a>
-                                </div>
-
-                                <div class="col-md-2 col-6 mb-3">
-                                    <a href="#" class="btn btn-app bg-warning">
-                                        <i class="fas fa-chair"></i> Meja
-                                    </a>
-                                </div>
-
-                                <div class="col-md-2 col-6 mb-3">
-                                    <a href="#" class="btn btn-app bg-danger">
-                                        <i class="fas fa-users"></i> User
-                                    </a>
-                                </div>
-
-                                <div class="col-md-2 col-6 mb-3">
-                                    <a href="#" class="btn btn-app bg-primary">
-                                        <i class="fas fa-file-alt"></i> Laporan
-                                    </a>
-                                </div>
-
-                                <!-- FIX ROUTE LOGIN HISTORY -->
-                                <div class="col-md-2 col-6 mb-3">
-                                    <a href="{{ route('owner.loginhistory') }}" class="btn btn-app bg-secondary">
-                                        <i class="fas fa-history"></i> Login History
-                                    </a>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </section>
-
-</div>
-@endsection
+        /*
+        |----------------------------------------------------------------------
+        | RETURN VIEW MANAGER
+        |----------------------------------------------------------------------
+        */
+        return view('manager.dashboard.dashboardmanager', compact(
+            'totalProduk',
+            'totalKategori',
+            'totalMeja',
+            'totalKasir',
+            'shiftAktif',
+            'penjualanHariIni',
+            'pendapatanHariIni',
+            'pendapatanBulanIni',
+            'produkTerlaris',
+            'stokMenipis'
+        ));
+    }
+}

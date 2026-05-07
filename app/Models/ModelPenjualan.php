@@ -11,6 +11,7 @@ class ModelPenjualan extends Model
     protected $fillable = [
         'kodeinvoice',
         'userid',
+        'shiftid', // ✅ FIX
         'mejaid',
         'promoid',
         'pajakid',
@@ -31,6 +32,11 @@ class ModelPenjualan extends Model
     public function user()
     {
         return $this->belongsTo(ModelUser::class, 'userid', 'id');
+    }
+
+    public function shift()
+    {
+        return $this->belongsTo(ModelShift::class, 'shiftid', 'id'); // ✅ FIX
     }
 
     public function meja()

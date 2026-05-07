@@ -66,7 +66,7 @@
                     </p>
 
                     <p class="text-white-50 mb-2">
-                        <i class="fa-solid fa-phone"></i> +62 812-xxxx-xxxx
+                        <i class="fa-solid fa-phone"></i> +62 83878969362
                     </p>
 
                     <p class="text-white-50 mb-2">
@@ -80,10 +80,10 @@
                     <p class="text-white-50">08:00 - 23:00</p>
 
                     <div class="d-flex gap-3 mt-4">
-                        <a href="#" class="text-white fs-4"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="https://www.instagram.com/hanzdikz?igsh=MXJhMG5nOTZuNjB2YQ==" class="text-white fs-4"><i class="fa-brands fa-instagram"></i></a>
                         <a href="#" class="text-white fs-4"><i class="fa-brands fa-facebook"></i></a>
                         <a href="#" class="text-white fs-4"><i class="fa-brands fa-youtube"></i></a>
-                        <a href="#" class="text-white fs-4"><i class="fa-brands fa-tiktok"></i></a>
+                        <a href="https://www.tiktok.com/@hanzdikz?_r=1&_t=ZS-968M1sMcUKL" class="text-white fs-4"><i class="fa-brands fa-tiktok"></i></a>
                     </div>
                 </div>
 

@@ -20,6 +20,12 @@
             </div>
             @endif
 
+            @if(session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+            @endif
+
             @if($errors->any())
             <div class="alert alert-danger">
                 <ul class="mb-0">
@@ -30,13 +36,14 @@
             </div>
             @endif
 
-            <form action="{{ route('shift.buka.proses') }}" method="POST">
+            {{-- FIX ROUTE --}}
+            <form action="{{ route('kasir.shift.buka.proses') }}" method="POST">
                 @csrf
 
                 <div class="form-group">
                     <label>Saldo Awal</label>
                     <input type="number" name="saldoawal" class="form-control"
-                        placeholder="Masukkan saldo awal..." required>
+                        placeholder="Masukkan saldo awal..." required min="0">
                 </div>
 
                 <div class="mt-4">
@@ -44,7 +51,7 @@
                         <i class="fas fa-check"></i> Buka Shift
                     </button>
 
-                    <a href="{{ route('dashboard.kasir') }}" class="btn btn-secondary">
+                    <a href="{{ route('kasir.shift.index') }}" class="btn btn-secondary">
                         <i class="fas fa-arrow-left"></i> Kembali
                     </a>
                 </div>

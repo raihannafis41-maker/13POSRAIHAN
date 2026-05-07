@@ -9,12 +9,11 @@ use Illuminate\Support\Facades\Auth;
 
 use App\Models\ModelProduk;
 use App\Models\ModelMeja;
-use App\Models\ModelPromo;
-use App\Models\ModelPajak;
 use App\Models\ModelPenjualan;
 use App\Models\ModelDetailPenjualan;
 use App\Models\ModelPembayaran;
 use App\Models\ModelMetodePembayaran;
+use App\Models\ModelShift;
 
 class ControllerPenjualan extends Controller
 {
@@ -114,6 +113,17 @@ class ControllerPenjualan extends Controller
             'jumlahbayar' => 'required|numeric|min:0'
         ]);
 
+        // ✅ CEK SHIFT OPEN (WAJIB)
+        $shiftAktif = ModelShift::where('userid', Auth::id())
+            ->where('status', 'open')
+            ->latest()
+            ->first();
+
+        if (!$shiftAktif) {
+            return redirect()->route('kasir.shift.index')
+                ->with('error', 'Shift belum dibuka! Silakan buka shift dulu.');
+        }
+
         $subtotal = 0;
         foreach ($cart as $item) {
             $subtotal += $item['subtotal'];
@@ -131,8 +141,9 @@ class ControllerPenjualan extends Controller
         try {
 
             $penjualan = ModelPenjualan::create([
-                'kodeinvoice' => 'INV-' . date('YmdHis'),
-                'userid' => Auth::user()->id,
+                'kodeinvoice' => 'INV-' . date('YmdHis') . '-' . rand(100, 999),
+                'userid' => Auth::id(),
+                'shiftid' => $shiftAktif->id,
                 'mejaid' => null,
                 'promoid' => null,
                 'pajakid' => null,
@@ -159,6 +170,7 @@ class ControllerPenjualan extends Controller
                 'metodepembayaranid' => $request->metodepembayaranid,
                 'jumlahbayar' => $jumlahbayar,
                 'kembalian' => $kembalian,
+                'tanggalbayar' => now(),
                 'buktibayar' => null,
                 'status' => 'paid'
             ]);

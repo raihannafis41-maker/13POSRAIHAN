@@ -10,15 +10,12 @@ class ControllerAuthLoginHistory extends Controller
     public function index()
     {
         $data = DB::table('loginhistory')
-            ->leftJoin('user', 'loginhistory.userid', '=', 'user.id')
-            ->select(
-                'loginhistory.*',
-                'user.name as namauser',
-                'user.username'
-            )
-            ->orderBy('loginhistory.loginat', 'desc')
+            ->join('user', 'loginhistory.userid', '=', 'user.id')
+            ->select('loginhistory.*', 'user.name', 'user.username')
+            ->orderBy('loginhistory.id', 'desc')
             ->get();
 
-        return view('owner.loginhistory.index', compact('data'));
+        // FIX VIEW PATH (OWNER = ADMIN)
+        return view('admin.loginhistory.index', compact('data'));
     }
 }

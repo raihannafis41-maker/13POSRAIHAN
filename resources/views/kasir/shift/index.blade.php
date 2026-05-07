@@ -40,10 +40,11 @@
                         <div class="alert alert-success">
                             <b>Shift Sedang OPEN</b><br>
                             Mulai: {{ $shiftAktif->shiftmulai }} <br>
-                            Saldo Awal: Rp {{ number_format($shiftAktif->saldoawal) }}
+                            Saldo Awal: Rp {{ number_format($shiftAktif->saldoawal, 0, ',', '.') }}
                         </div>
 
-                        <a href="{{ route('shift.tutup') }}" class="btn btn-danger">
+                        {{-- ✅ FIX ROUTE --}}
+                        <a href="{{ route('kasir.shift.tutup') }}" class="btn btn-danger">
                             <i class="fas fa-door-closed"></i> Tutup Shift
                         </a>
                     @else
@@ -52,7 +53,8 @@
                             Silahkan buka shift sebelum transaksi.
                         </div>
 
-                        <a href="{{ route('shift.buka') }}" class="btn btn-success">
+                        {{-- ✅ FIX ROUTE --}}
+                        <a href="{{ route('kasir.shift.buka') }}" class="btn btn-success">
                             <i class="fas fa-door-open"></i> Buka Shift
                         </a>
                     @endif

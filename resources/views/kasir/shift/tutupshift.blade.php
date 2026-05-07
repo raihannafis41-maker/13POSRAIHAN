@@ -20,13 +20,9 @@
             </div>
             @endif
 
-            @if($errors->any())
+            @if(session('error'))
             <div class="alert alert-danger">
-                <ul class="mb-0">
-                    @foreach($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
+                {{ session('error') }}
             </div>
             @endif
 
@@ -34,21 +30,29 @@
                 Pastikan semua transaksi sudah selesai sebelum menutup shift.
             </div>
 
-            <form action="{{ route('shift.tutup.proses') }}" method="POST">
+            {{-- ✅ INFORMASI REALTIME SHIFT --}}
+            <div class="alert alert-info">
+                <b>Shift Mulai:</b> {{ $shiftAktif->shiftmulai }} <br>
+                <b>Total Transaksi:</b> {{ $totalTransaksi }} <br>
+                <b>Total Pendapatan:</b> Rp {{ number_format($totalPendapatan, 0, ',', '.') }} <br>
+                <b>Saldo Awal:</b> Rp {{ number_format($shiftAktif->saldoawal, 0, ',', '.') }} <br>
+                <hr>
+                <b>Saldo Akhir Otomatis:</b>
+                <span class="text-success fw-bold">
+                    Rp {{ number_format($saldoAkhirOtomatis, 0, ',', '.') }}
+                </span>
+            </div>
+
+            {{-- ✅ FIX ROUTE ACTION FORM --}}
+            <form action="{{ route('kasir.shift.tutup.proses') }}" method="POST">
                 @csrf
 
-                <div class="form-group">
-                    <label>Saldo Akhir</label>
-                    <input type="number" name="saldoakhir" class="form-control"
-                        placeholder="Masukkan saldo akhir..." required>
-                </div>
-
-                <div class="mt-4">
+                <div class="mt-3">
                     <button type="submit" class="btn btn-danger">
-                        <i class="fas fa-times"></i> Tutup Shift
+                        <i class="fas fa-times"></i> Tutup Shift Sekarang
                     </button>
 
-                    <a href="{{ route('dashboard.kasir') }}" class="btn btn-secondary">
+                    <a href="{{ route('kasir.shift.index') }}" class="btn btn-secondary">
                         <i class="fas fa-arrow-left"></i> Kembali
                     </a>
                 </div>

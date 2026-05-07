@@ -74,11 +74,20 @@
                     </a>
                 </li>
 
+                <!-- RIWAYAT -->
+                <li class="nav-item">
+                    <a href="{{ route('kasir.riwayat.index') }}"
+                       class="nav-link {{ request()->is('kasir/riwayat*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-history"></i>
+                        <p>Riwayat</p>
+                    </a>
+                </li>
+
                 <li class="nav-header">SHIFT</li>
 
                 <!-- SHIFT -->
                 <li class="nav-item">
-                    <a href="{{ route('shift.index') }}"
+                    <a href="{{ route('kasir.shift.index') }}"
                        class="nav-link {{ request()->is('kasir/shift*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-user-clock"></i>
                         <p>Shift</p>

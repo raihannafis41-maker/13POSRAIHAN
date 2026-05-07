@@ -20,7 +20,7 @@ use App\Http\Controllers\Dashboard\ControllerDashboardOwner;
 use App\Http\Controllers\Dashboard\ControllerDashboardManager;
 use App\Http\Controllers\Dashboard\ControllerDashboardKasir;
 
-// MASTER
+// MASTER (OWNER ONLY)
 use App\Http\Controllers\Master\ControllerUser;
 use App\Http\Controllers\Master\ControllerKategori;
 use App\Http\Controllers\Master\ControllerProduk;
@@ -30,27 +30,35 @@ use App\Http\Controllers\Master\ControllerMetodePembayaran;
 use App\Http\Controllers\Master\ControllerPromo;
 use App\Http\Controllers\Master\ControllerPajak;
 
-// INVENTORY
+// INVENTORY (OWNER + MANAGER)
 use App\Http\Controllers\Inventory\ControllerBahanBaku;
 use App\Http\Controllers\Inventory\ControllerStok;
 use App\Http\Controllers\Inventory\ControllerStokMasuk;
 use App\Http\Controllers\Inventory\ControllerStokKeluar;
 use App\Http\Controllers\Inventory\ControllerPembelian;
 
-// TRANSAKSI (POS)
+// TRANSAKSI (KASIR)
 use App\Http\Controllers\Transaksi\ControllerPenjualan;
 use App\Http\Controllers\Transaksi\ControllerShift;
+use App\Http\Controllers\Transaksi\ControllerRiwayatKasir;
 
-// LAPORAN
+// LAPORAN (OWNER + MANAGER)
 use App\Http\Controllers\Laporan\ControllerLaporan;
+use App\Http\Controllers\Laporan\ControllerLaporanHarian;
+use App\Http\Controllers\Laporan\ControllerLaporanBulanan;
+use App\Http\Controllers\Laporan\ControllerLaporanProduk;
+use App\Http\Controllers\Laporan\ControllerLaporanKasir;
+use App\Http\Controllers\Laporan\ControllerLaporanShift;
+use App\Http\Controllers\Laporan\ControllerLaporanKeuntungan;
 
-// ZONA KASIR
+// ZONA KASIR (OWNER ONLY)
 use App\Http\Controllers\ZonaKasir\ControllerZonaKasir;
+
 
 
 /*
 |--------------------------------------------------------------------------
-| ROUTE LANDING (PUBLIC / GUEST)
+| LANDING (PUBLIC)
 |--------------------------------------------------------------------------
 */
 
@@ -61,9 +69,10 @@ Route::get('/tentang', [ControllerLanding::class, 'tentang'])->name('landing.ten
 Route::get('/kontak', [ControllerLanding::class, 'kontak'])->name('landing.kontak');
 
 
+
 /*
 |--------------------------------------------------------------------------
-| ROUTE AUTH
+| AUTH
 |--------------------------------------------------------------------------
 */
 Route::get('/login', [ControllerAuthUser::class, 'login'])->name('auth.login');
@@ -71,9 +80,10 @@ Route::post('/login', [ControllerAuthUser::class, 'loginProses'])->name('auth.lo
 Route::get('/logout', [ControllerAuthUser::class, 'logout'])->name('auth.logout');
 
 
+
 /*
 |--------------------------------------------------------------------------
-| ROUTE OWNER (ROLE: owner)
+| OWNER ONLY
 |--------------------------------------------------------------------------
 */
 Route::middleware(['auth', 'role:owner'])->group(function () {
@@ -86,13 +96,8 @@ Route::middleware(['auth', 'role:owner'])->group(function () {
     Route::get('/loginhistory', [ControllerAuthLoginHistory::class, 'index'])
         ->name('loginhistory.index');
 
-
-    /*
-    |--------------------------------------------------------------------------
-    | MASTER DATA (prefix: master)
-    |--------------------------------------------------------------------------
-    */
-    Route::prefix('master')->group(function () {
+    // MASTER DATA
+    Route::prefix('master')->name('master.')->group(function () {
 
         // USER CRUD
         Route::get('/user', [ControllerUser::class, 'index'])->name('user.index');
@@ -102,35 +107,49 @@ Route::middleware(['auth', 'role:owner'])->group(function () {
         Route::post('/user/update/{id}', [ControllerUser::class, 'update'])->name('user.update');
         Route::get('/user/delete/{id}', [ControllerUser::class, 'delete'])->name('user.delete');
 
-        // KATEGORI
+        // MASTER LAINNYA
         Route::get('/kategori', [ControllerKategori::class, 'index'])->name('kategori.index');
-
-        // PRODUK
         Route::get('/produk', [ControllerProduk::class, 'index'])->name('produk.index');
-
-        // MEJA
         Route::get('/meja', [ControllerMeja::class, 'index'])->name('meja.index');
-
-        // SUPPLIER
         Route::get('/supplier', [ControllerSupplier::class, 'index'])->name('supplier.index');
-
-        // METODE PEMBAYARAN
         Route::get('/metodepembayaran', [ControllerMetodePembayaran::class, 'index'])->name('metodepembayaran.index');
-
-        // PROMO
         Route::get('/promo', [ControllerPromo::class, 'index'])->name('promo.index');
-
-        // PAJAK
         Route::get('/pajak', [ControllerPajak::class, 'index'])->name('pajak.index');
     });
 
+    // ZONA KASIR
+    Route::get('/zonakasir', [ControllerZonaKasir::class, 'index'])
+        ->name('zonakasir.index');
+});
+
+
+
+/*
+|--------------------------------------------------------------------------
+| MANAGER ONLY
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'role:manager'])->group(function () {
+
+    Route::get('/dashboardmanager', [ControllerDashboardManager::class, 'index'])
+        ->name('dashboard.manager');
+});
+
+
+
+/*
+|--------------------------------------------------------------------------
+| OWNER + MANAGER
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'role:owner,manager'])->group(function () {
 
     /*
     |--------------------------------------------------------------------------
-    | INVENTORY (prefix: inventory)
+    | INVENTORY
     |--------------------------------------------------------------------------
     */
-    Route::prefix('inventory')->group(function () {
+    Route::prefix('inventory')->name('inventory.')->group(function () {
 
         Route::get('/bahanbaku', [ControllerBahanBaku::class, 'index'])->name('bahanbaku.index');
         Route::get('/stok', [ControllerStok::class, 'index'])->name('stok.index');
@@ -142,94 +161,127 @@ Route::middleware(['auth', 'role:owner'])->group(function () {
 
     /*
     |--------------------------------------------------------------------------
-    | TRANSAKSI / KASIR (prefix: kasir)
+    | LAPORAN (OWNER + MANAGER)
     |--------------------------------------------------------------------------
     */
-    Route::prefix('kasir')->group(function () {
+    Route::prefix('laporan')->name('laporan.')->group(function () {
 
-        Route::get('/pos', [ControllerPenjualan::class, 'index'])->name('kasir.pos');
+        // HALAMAN UTAMA LAPORAN
+        Route::get('/', [ControllerLaporan::class, 'index'])->name('index');
+        Route::get('/create', [ControllerLaporan::class, 'create'])->name('create');
+        Route::post('/store', [ControllerLaporan::class, 'store'])->name('store');
 
-        Route::post('/pos/tambah', [ControllerPenjualan::class, 'tambah'])->name('kasir.pos.tambah');
-        Route::post('/pos/hapus', [ControllerPenjualan::class, 'hapus'])->name('kasir.pos.hapus');
-        Route::post('/pos/reset', [ControllerPenjualan::class, 'reset'])->name('kasir.pos.reset');
+        Route::get('/show/{id}', [ControllerLaporan::class, 'show'])->name('show');
 
-        Route::get('/pembayaran', [ControllerPenjualan::class, 'pembayaran'])->name('kasir.pembayaran');
-        Route::post('/pembayaran/proses', [ControllerPenjualan::class, 'proses'])->name('kasir.pembayaran.proses');
+        Route::get('/edit/{id}', [ControllerLaporan::class, 'edit'])->name('edit');
+        Route::post('/update/{id}', [ControllerLaporan::class, 'update'])->name('update');
 
-        Route::get('/sukses/{id}', [ControllerPenjualan::class, 'sukses'])->name('kasir.sukses');
-        Route::get('/struk/{id}', [ControllerPenjualan::class, 'struk'])->name('kasir.struk');
+        Route::get('/delete/{id}', [ControllerLaporan::class, 'delete'])->name('delete');
 
-        // SHIFT (owner hanya lihat monitoring shift)
-        Route::get('/shift', [ControllerShift::class, 'index'])->name('shift.index');
+        // LAPORAN HARIAN
+        Route::prefix('harian')->name('harian.')->group(function () {
+            Route::get('/', [ControllerLaporanHarian::class, 'index'])->name('index');
+            Route::get('/show/{id}', [ControllerLaporanHarian::class, 'show'])->name('show');
+        });
+
+        // LAPORAN BULANAN
+        Route::prefix('bulanan')->name('bulanan.')->group(function () {
+            Route::get('/', [ControllerLaporanBulanan::class, 'index'])->name('index');
+            Route::get('/show/{id}', [ControllerLaporanBulanan::class, 'show'])->name('show');
+        });
+
+        // LAPORAN PRODUK
+        Route::prefix('produk')->name('produk.')->group(function () {
+            Route::get('/', [ControllerLaporanProduk::class, 'index'])->name('index');
+            Route::get('/show/{id}', [ControllerLaporanProduk::class, 'show'])->name('show');
+        });
+
+        // LAPORAN KASIR
+        Route::prefix('kasir')->name('kasir.')->group(function () {
+            Route::get('/', [ControllerLaporanKasir::class, 'index'])->name('index');
+            Route::get('/show/{id}', [ControllerLaporanKasir::class, 'show'])->name('show');
+        });
+
+        // LAPORAN SHIFT
+        Route::prefix('shift')->name('shift.')->group(function () {
+            Route::get('/', [ControllerLaporanShift::class, 'index'])->name('index');
+            Route::get('/show/{id}', [ControllerLaporanShift::class, 'show'])->name('show');
+        });
+
+        // LAPORAN KEUNTUNGAN
+        Route::prefix('keuntungan')->name('keuntungan.')->group(function () {
+            Route::get('/', [ControllerLaporanKeuntungan::class, 'index'])->name('index');
+            Route::get('/show/{id}', [ControllerLaporanKeuntungan::class, 'show'])->name('show');
+        });
     });
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | LAPORAN
-    |--------------------------------------------------------------------------
-    */
-    Route::get('/laporan', [ControllerLaporan::class, 'index'])->name('laporan.index');
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | ZONA KASIR
-    |--------------------------------------------------------------------------
-    */
-    Route::get('/zonakasir', [ControllerZonaKasir::class, 'index'])->name('zonakasir.index');
 });
+
 
 
 /*
 |--------------------------------------------------------------------------
-| ROUTE MANAGER (ROLE: manager)
-|--------------------------------------------------------------------------
-*/
-Route::middleware(['auth', 'role:manager'])->group(function () {
-
-    Route::get('/dashboardmanager', [ControllerDashboardManager::class, 'index'])
-        ->name('dashboard.manager');
-});
-
-
-/*
-|--------------------------------------------------------------------------
-| ROUTE KASIR (ROLE: kasir)
+| KASIR ONLY
 |--------------------------------------------------------------------------
 */
 Route::middleware(['auth', 'role:kasir'])->group(function () {
 
+    // DASHBOARD KASIR
     Route::get('/dashboardkasir', [ControllerDashboardKasir::class, 'index'])
         ->name('dashboard.kasir');
 
-    Route::prefix('kasir')->group(function () {
+    Route::prefix('kasir')->name('kasir.')->group(function () {
 
-        // POS
-        Route::get('/pos', [ControllerPenjualan::class, 'index'])->name('kasir.pos');
-        Route::post('/pos/tambah', [ControllerPenjualan::class, 'tambah'])->name('kasir.pos.tambah');
-        Route::post('/pos/hapus', [ControllerPenjualan::class, 'hapus'])->name('kasir.pos.hapus');
-        Route::post('/pos/reset', [ControllerPenjualan::class, 'reset'])->name('kasir.pos.reset');
+        /*
+        |--------------------------------------------------------------------------
+        | POS
+        |--------------------------------------------------------------------------
+        */
+        Route::get('/pos', [ControllerPenjualan::class, 'index'])->name('pos');
+        Route::post('/pos/tambah', [ControllerPenjualan::class, 'tambah'])->name('pos.tambah');
+        Route::post('/pos/hapus', [ControllerPenjualan::class, 'hapus'])->name('pos.hapus');
+        Route::post('/pos/reset', [ControllerPenjualan::class, 'reset'])->name('pos.reset');
 
-        // PEMBAYARAN
-        Route::get('/pembayaran', [ControllerPenjualan::class, 'pembayaran'])->name('kasir.pembayaran');
-        Route::post('/pembayaran/proses', [ControllerPenjualan::class, 'proses'])->name('kasir.pembayaran.proses');
+        /*
+        |--------------------------------------------------------------------------
+        | PEMBAYARAN
+        |--------------------------------------------------------------------------
+        */
+        Route::get('/pembayaran', [ControllerPenjualan::class, 'pembayaran'])->name('pembayaran');
+        Route::post('/pembayaran/proses', [ControllerPenjualan::class, 'proses'])->name('pembayaran.proses');
 
-        Route::get('/sukses/{id}', [ControllerPenjualan::class, 'sukses'])->name('kasir.sukses');
-        Route::get('/struk/{id}', [ControllerPenjualan::class, 'struk'])->name('kasir.struk');
+        /*
+        |--------------------------------------------------------------------------
+        | STRUK & SUKSES
+        |--------------------------------------------------------------------------
+        */
+        Route::get('/sukses/{id}', [ControllerPenjualan::class, 'sukses'])->name('sukses');
+        Route::get('/struk/{id}', [ControllerPenjualan::class, 'struk'])->name('struk');
 
-        // SHIFT
-        Route::get('/shift', [ControllerShift::class, 'index'])->name('shift.index');
+        /*
+        |--------------------------------------------------------------------------
+        | SHIFT
+        |--------------------------------------------------------------------------
+        */
+        Route::prefix('shift')->name('shift.')->group(function () {
 
-        Route::get('/bukashift', [ControllerShift::class, 'bukaShift'])->name('shift.buka');
-        Route::post('/bukashift', [ControllerShift::class, 'prosesBukaShift'])->name('shift.buka.proses');
+            Route::get('/', [ControllerShift::class, 'index'])->name('index');
 
-        Route::get('/tutupshift', [ControllerShift::class, 'tutupShift'])->name('shift.tutup');
-        Route::post('/tutupshift', [ControllerShift::class, 'prosesTutupShift'])->name('shift.tutup.proses');
+            Route::get('/buka', [ControllerShift::class, 'bukaShift'])->name('buka');
+            Route::post('/buka', [ControllerShift::class, 'prosesBukaShift'])->name('buka.proses');
 
-        // RIWAYAT
-        Route::get('/riwayat', function () {
-            return view('kasir.riwayat.index');
-        })->name('kasir.riwayat');
+            Route::get('/tutup', [ControllerShift::class, 'tutupShift'])->name('tutup');
+            Route::post('/tutup', [ControllerShift::class, 'prosesTutupShift'])->name('tutup.proses');
+        });
+
+        /*
+        |--------------------------------------------------------------------------
+        | RIWAYAT TRANSAKSI
+        |--------------------------------------------------------------------------
+        */
+        Route::prefix('riwayat')->name('riwayat.')->group(function () {
+
+            Route::get('/', [ControllerRiwayatKasir::class, 'index'])->name('index');
+            Route::get('/{id}', [ControllerRiwayatKasir::class, 'show'])->name('show');
+        });
     });
 });

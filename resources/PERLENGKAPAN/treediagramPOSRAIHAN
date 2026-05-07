@@ -33,6 +33,7 @@ CAFEPOS/
 │   │   │   ├── Transaksi/
 │   │   │   │   ├── ControllerPenjualan.php
 │   │   │   │   ├── ControllerCetakStruk.php
+|   |   |   |   ├── ControllerRiwayatKasir.php   
 │   │   │   │   └── ControllerShift.php
 │   │   │   │
 │   │   │   ├── Laporan/
@@ -73,7 +74,14 @@ CAFEPOS/
 │   │   ├── ModelStokMasuk.php
 │   │   ├── ModelStokKeluar.php
 │   │   ├── ModelBahanBaku.php
-│   │   ├── ModelPembelian.php
+│   |   ├── ModelPembelian.php
+|   |   ├── ModelLaporan.php
+|   |   ├── ModelLaporanHarian.php       
+|   |   ├── ModelLaporanBulanan.php      
+|   |   ├── ModelLaporanProduk.php  
+|   |   ├── ModelLaporanShift.php       
+|   |   ├── ModelLaporanKasir.php        
+|   |   ├── ModelLaporanKeuntungan.php  
 │   │   └── ModelLoginHistory.php
 │   │
 │   ├── Providers/
@@ -92,14 +100,20 @@ CAFEPOS/
 │   │   ├── layouts/
 │   │   │   ├── appadmin.blade.php
 │   │   │   ├── appkasir.blade.php
+│   │   │   ├── appmanager.blade.php
 │   │   │   ├── appguest.blade.php
-│   │   │   │
+│   │   │   |
 │   │   │   ├── admin/
 │   │   │   │   ├── navbar.blade.php
 │   │   │   │   ├── sidebar.blade.php
 │   │   │   │   └── footer.blade.php
 │   │   │   │
 │   │   │   ├── kasir/
+│   │   │   │   ├── navbar.blade.php
+│   │   │   │   ├── sidebar.blade.php
+│   │   │   │   └── footer.blade.php
+│   │   │   │   
+│   │   │   ├── manager/
 │   │   │   │   ├── navbar.blade.php
 │   │   │   │   ├── sidebar.blade.php
 │   │   │   │   └── footer.blade.php
@@ -161,12 +175,111 @@ CAFEPOS/
 │   │   │   │   └── show.blade.php
 │   │   │   │
 │   │   │   ├── laporan/
+│   │   │   │   ├── harian/
+│   │   │   │   │   ├── index.blade.php
+│   │   │   │   │   ├── create.blade.php
+│   │   │   │   │   ├── edit.blade.php
+│   │   │   │   │   └── show.blade.php
+│   │   │   │   ├── bulanan/
+│   │   │   │   │   ├── index.blade.php
+│   │   │   │   │   ├── create.blade.php
+│   │   │   │   │   ├── edit.blade.php
+│   │   │   │   │   └── show.blade.php
+│   │   │   │   ├── kasir/
+│   │   │   │   │   ├── index.blade.php
+│   │   │   │   │   ├── create.blade.php
+│   │   │   │   │   ├── edit.blade.php
+│   │   │   │   │   └── show.blade.php
+│   │   │   │   ├── produk/
+│   │   │   │   │   ├── index.blade.php
+│   │   │   │   │   ├── create.blade.php
+│   │   │   │   │   ├── edit.blade.php
+│   │   │   │   │   └── show.blade.php
+│   │   │   │   ├── shift/
+│   │   │   │   │   ├── index.blade.php
+│   │   │   │   │   ├── create.blade.php
+│   │   │   │   │   ├── edit.blade.php
+│   │   │   │   │   └── show.blade.php
+│   │   │   │   ├── keuntungan/
+│   │   │   │   │   ├── index.blade.php
+│   │   │   │   │   ├── create.blade.php
+│   │   │   │   │   ├── edit.blade.php
+│   │   │   │   │   └── show.blade.php
 │   │   │   │   ├── index.blade.php
 │   │   │   │   ├── create.blade.php
 │   │   │   │   ├── edit.blade.php
 │   │   │   │   └── show.blade.php
+|   |   |   |
 │   │   │   │
-│   │   │   └── inventory/    (INI YANG DITAMBAHKAN)
+│   │   │   └── inventory/    
+│   │   │       ├── bahanbaku/
+│   │   │       │   ├── index.blade.php
+│   │   │       │   ├── create.blade.php
+│   │   │       │   ├── edit.blade.php
+│   │   │       │   └── show.blade.php
+│   │   │       │
+│   │   │       ├── stok/
+│   │   │       │   ├── index.blade.php
+│   │   │       │   ├── create.blade.php
+│   │   │       │   ├── edit.blade.php
+│   │   │       │   └── show.blade.php
+│   │   │       │
+│   │   │       ├── stokmasuk/
+│   │   │       │   ├── index.blade.php
+│   │   │       │   ├── create.blade.php
+│   │   │       │   ├── edit.blade.php
+│   │   │       │   └── show.blade.php
+│   │   │       │
+│   │   │       ├── stokkeluar/
+│   │   │       │   ├── index.blade.php
+│   │   │       │   ├── create.blade.php
+│   │   │       │   ├── edit.blade.php
+│   │   │       │   └── show.blade.php
+│   │   │       │
+│   │   │       └── pembelian/
+│   │   │           ├── index.blade.php
+│   │   │           ├── create.blade.php
+│   │   │           ├── edit.blade.php
+│   │   │           └── show.blade.php
+│   │   ├── manager/
+│   │   │   ├── dashboard/
+│   │   │   │   └── dashboardmanager.blade.php
+│   │   │   ├── laporan/
+│   │   │   │   ├── harian/
+│   │   │   │   │   ├── index.blade.php
+│   │   │   │   │   ├── create.blade.php
+│   │   │   │   │   ├── edit.blade.php
+│   │   │   │   │   └── show.blade.php
+│   │   │   │   ├── bulanan/
+│   │   │   │   │   ├── index.blade.php
+│   │   │   │   │   ├── create.blade.php
+│   │   │   │   │   ├── edit.blade.php
+│   │   │   │   │   └── show.blade.php
+│   │   │   │   ├── kasir/
+│   │   │   │   │   ├── index.blade.php
+│   │   │   │   │   ├── create.blade.php
+│   │   │   │   │   ├── edit.blade.php
+│   │   │   │   │   └── show.blade.php
+│   │   │   │   ├── produk/
+│   │   │   │   │   ├── index.blade.php
+│   │   │   │   │   ├── create.blade.php
+│   │   │   │   │   ├── edit.blade.php
+│   │   │   │   │   └── show.blade.php
+│   │   │   │   ├── shift/
+│   │   │   │   │   ├── index.blade.php
+│   │   │   │   │   ├── create.blade.php
+│   │   │   │   │   ├── edit.blade.php
+│   │   │   │   │   └── show.blade.php
+│   │   │   │   ├── keuntungan/
+│   │   │   │   │   ├── index.blade.php
+│   │   │   │   │   ├── create.blade.php
+│   │   │   │   │   ├── edit.blade.php
+│   │   │   │   │   └── show.blade.php
+│   │   │   │   ├── index.blade.php
+│   │   │   │   ├── create.blade.php
+│   │   │   │   ├── edit.blade.php
+│   │   │   │   └── show.blade.php
+│   │   │   └── inventory/    
 │   │   │       ├── bahanbaku/
 │   │   │       │   ├── index.blade.php
 │   │   │       │   ├── create.blade.php
@@ -209,6 +322,8 @@ CAFEPOS/
 │   │   │   │   ├── bukashift.blade.php
 │   │   │   │   └── tutupshift.blade.php
 │   │   │   └── riwayat/
+│   │   │       ├── index.blade.php
+│   │   │       └── show.blade.php
 │   │   │
 │   │   ├── landing/
 │   │   │   ├── home.blade.php
@@ -224,7 +339,7 @@ CAFEPOS/
 │   │       ├── 403.blade.php
 │   │       ├── 404.blade.php
 │   │       └── 500.blade.php
-│
+│   |
 ├── routes/
 │   └── web.php
 │

@@ -75,11 +75,12 @@
                         <div class="icon">
                             <i class="fas fa-user-clock"></i>
                         </div>
-                        <a href="{{ route('shift.index') }}" class="small-box-footer">
+                        <a href="{{ route('kasir.shift.index') }}" class="small-box-footer">
                             Kelola Shift <i class="fas fa-arrow-circle-right"></i>
                         </a>
                     </div>
                 </div>
+
             </div>
 
 
@@ -132,7 +133,7 @@
                                     <i class="fas fa-money-bill-wave"></i> Pembayaran
                                 </a>
 
-                                <a href="{{ route('shift.index') }}" class="btn btn-success btn-sm">
+                                <a href="{{ route('kasir.shift.index') }}" class="btn btn-success btn-sm">
                                     <i class="fas fa-user-clock"></i> Shift
                                 </a>
                             </div>
@@ -206,7 +207,7 @@
                                 </div>
 
                                 <div class="col-md-4 col-12 mb-2">
-                                    <a href="{{ route('shift.index') }}" class="btn btn-success btn-block btn-lg">
+                                    <a href="{{ route('kasir.shift.index') }}" class="btn btn-success btn-block btn-lg">
                                         <i class="fas fa-user-clock"></i> Shift
                                     </a>
                                 </div>
