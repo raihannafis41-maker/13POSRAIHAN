@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Master;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use App\Models\ModelMetodePembayaran;
 
 class ControllerMetodePembayaran extends Controller
@@ -11,7 +12,6 @@ class ControllerMetodePembayaran extends Controller
     public function index()
     {
         $data = ModelMetodePembayaran::latest()->get();
-
         return view('admin.metodepembayaran.index', compact('data'));
     }
 
@@ -24,24 +24,22 @@ class ControllerMetodePembayaran extends Controller
     {
         $request->validate([
             'namametode' => 'required',
-            'jenis' => 'required',
-            'status' => 'required',
-            'qrcode' => 'nullable|image',
+            'jenis'      => 'required',
+            'status'     => 'required',
+            'qrcode'     => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 
         $qrcode = null;
 
         if ($request->hasFile('qrcode')) {
-
-            $qrcode = $request->file('qrcode')
-                ->store('qrcode', 'public');
+            $qrcode = $request->file('qrcode')->store('qrcode', 'public');
         }
 
         ModelMetodePembayaran::create([
             'namametode' => $request->namametode,
-            'jenis' => $request->jenis,
-            'status' => $request->status,
-            'qrcode' => $qrcode,
+            'jenis'      => $request->jenis,
+            'status'     => $request->status,
+            'qrcode'     => $qrcode,
         ]);
 
         return redirect()
@@ -52,7 +50,6 @@ class ControllerMetodePembayaran extends Controller
     public function edit($id)
     {
         $data = ModelMetodePembayaran::findOrFail($id);
-
         return view('admin.metodepembayaran.edit', compact('data'));
     }
 
@@ -62,24 +59,29 @@ class ControllerMetodePembayaran extends Controller
 
         $request->validate([
             'namametode' => 'required',
-            'jenis' => 'required',
-            'status' => 'required',
-            'qrcode' => 'nullable|image',
+            'jenis'      => 'required',
+            'status'     => 'required',
+            'qrcode'     => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 
         $qrcode = $data->qrcode;
 
         if ($request->hasFile('qrcode')) {
 
-            $qrcode = $request->file('qrcode')
-                ->store('qrcode', 'public');
+            // hapus qrcode lama jika ada
+            if ($data->qrcode && Storage::disk('public')->exists($data->qrcode)) {
+                Storage::disk('public')->delete($data->qrcode);
+            }
+
+            // upload baru
+            $qrcode = $request->file('qrcode')->store('qrcode', 'public');
         }
 
         $data->update([
             'namametode' => $request->namametode,
-            'jenis' => $request->jenis,
-            'status' => $request->status,
-            'qrcode' => $qrcode,
+            'jenis'      => $request->jenis,
+            'status'     => $request->status,
+            'qrcode'     => $qrcode,
         ]);
 
         return redirect()
@@ -90,6 +92,11 @@ class ControllerMetodePembayaran extends Controller
     public function destroy($id)
     {
         $data = ModelMetodePembayaran::findOrFail($id);
+
+        // hapus file qrcode di storage
+        if ($data->qrcode && Storage::disk('public')->exists($data->qrcode)) {
+            Storage::disk('public')->delete($data->qrcode);
+        }
 
         $data->delete();
 

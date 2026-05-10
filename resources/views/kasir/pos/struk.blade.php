@@ -5,61 +5,94 @@
 @section('content')
 
 <style>
+    /* KERTAS STRUK (PREVIEW) */
     .struk-box {
-        max-width: 420px;
+        width: 80mm;
+        max-width: 80mm;
         margin: auto;
-        border: 1px dashed #444;
-        padding: 20px;
+        border: 1px dashed #000;
+        padding: 6mm;
         background: #fff;
+        /* biar bersih seperti struk asli */
         font-family: 'Courier New', monospace;
-        font-size: 14px;
+        font-size: 13px;
+        /* dibesarkan sedikit */
+        color: #000;
+        /* HITAM PEKAT */
+        box-sizing: border-box;
+        line-height: 1.4;
     }
 
-    .struk-header {
-        text-align: center;
-        margin-bottom: 10px;
+    /* semua teks lebih tegas */
+    .struk-box * {
+        color: #000 !important;
     }
 
+    /* header dibuat lebih bold */
     .struk-header h5 {
         margin: 0;
-        font-weight: bold;
-        font-size: 18px;
+        font-weight: 700;
+        font-size: 16px;
+        letter-spacing: 1px;
     }
 
     .struk-header small {
         display: block;
         font-size: 12px;
+        font-weight: 500;
     }
 
+    /* garis lebih jelas */
     .struk-line {
-        border-top: 1px dashed #333;
+        border-top: 1px dashed #000;
         margin: 10px 0;
     }
 
-    .struk-table {
-        width: 100%;
-        font-size: 13px;
-    }
-
+    /* tabel lebih rapi */
     .struk-table td {
         padding: 3px 0;
         vertical-align: top;
+        word-break: break-word;
+        font-size: 13px;
+    }
+
+    /* total lebih tegas */
+    .struk-table b {
+        font-weight: 700;
     }
 
     .text-right {
         text-align: right;
+        white-space: nowrap;
     }
 
     .text-center {
         text-align: center;
     }
 
+    .no-print {
+        display: block;
+    }
+
+    /* MODE PRINT */
     @media print {
+
+        @page {
+            size: 80mm auto;
+            /* ubah jadi 58mm auto jika printer 58mm */
+            margin: 3mm;
+        }
+
+        body {
+            background: white !important;
+        }
+
         body * {
             visibility: hidden;
         }
 
-        #areaPrint, #areaPrint * {
+        #areaPrint,
+        #areaPrint * {
             visibility: visible;
         }
 
@@ -68,6 +101,14 @@
             left: 0;
             top: 0;
             width: 100%;
+        }
+
+        .struk-box {
+            border: none !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            width: 80mm !important;
+            max-width: 80mm !important;
         }
 
         .no-print {
@@ -85,12 +126,10 @@
         </div>
 
         <div class="d-flex gap-2">
-            {{-- tombol kembali --}}
             <a href="{{ route('kasir.cetakstruk.index') }}" class="btn btn-secondary btn-sm">
                 ⬅ Kembali
             </a>
 
-            {{-- tombol print (langsung simpan log ke database) --}}
             <a href="{{ route('kasir.cetakstruk.print', $penjualan->id) }}" class="btn btn-primary btn-sm">
                 🖨 Print Struk
             </a>
@@ -126,19 +165,19 @@
             {{-- DETAIL ITEM --}}
             <table class="struk-table">
                 @foreach($detail as $d)
-                    <tr>
-                        <td colspan="2">
-                            <b>{{ $d->namaproduk ?? 'Produk' }}</b>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            {{ $d->qty ?? 0 }} x Rp {{ number_format($d->harga ?? 0, 0, ',', '.') }}
-                        </td>
-                        <td class="text-right">
-                            Rp {{ number_format($d->subtotal ?? (($d->qty ?? 0) * ($d->harga ?? 0)), 0, ',', '.') }}
-                        </td>
-                    </tr>
+                <tr>
+                    <td colspan="2">
+                        <b>{{ $d->produk->namaproduk ?? 'Produk' }}</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        {{ $d->qty ?? 0 }} x Rp {{ number_format($d->harga ?? 0, 0, ',', '.') }}
+                    </td>
+                    <td class="text-right">
+                        Rp {{ number_format($d->subtotal ?? (($d->qty ?? 0) * ($d->harga ?? 0)), 0, ',', '.') }}
+                    </td>
+                </tr>
                 @endforeach
             </table>
 
@@ -167,7 +206,7 @@
                 <tr>
                     <td>Metode</td>
                     <td class="text-right">
-                        {{ $pembayaran->metode ?? '-' }}
+                        {{ $pembayaran->metode->namametode ?? '-' }}
                     </td>
                 </tr>
             </table>
@@ -183,4 +222,5 @@
     </div>
 
 </div>
+
 @endsection

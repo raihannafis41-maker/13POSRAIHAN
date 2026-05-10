@@ -12,6 +12,7 @@ class ControllerMeja extends Controller
     public function index()
     {
         $data = ModelMeja::orderBy('id', 'desc')->get();
+
         return view('admin.meja.index', compact('data'));
     }
 
@@ -33,12 +34,15 @@ class ControllerMeja extends Controller
             'status' => 'kosong',
         ]);
 
-        return redirect('/admin/meja')->with('success', 'Meja berhasil ditambahkan!');
+        return redirect()
+            ->route('master.meja.index')
+            ->with('success', 'Meja berhasil ditambahkan!');
     }
 
     public function edit($id)
     {
         $data = ModelMeja::findOrFail($id);
+
         return view('admin.meja.edit', compact('data'));
     }
 
@@ -58,14 +62,19 @@ class ControllerMeja extends Controller
             'status' => $request->status,
         ]);
 
-        return redirect('/admin/meja')->with('success', 'Meja berhasil diupdate!');
+        return redirect()
+            ->route('master.meja.index')
+            ->with('success', 'Meja berhasil diupdate!');
     }
 
     public function delete($id)
     {
         $data = ModelMeja::findOrFail($id);
+
         $data->delete();
 
-        return redirect('/admin/meja')->with('success', 'Meja berhasil dihapus!');
+        return redirect()
+            ->route('master.meja.index')
+            ->with('success', 'Meja berhasil dihapus!');
     }
 }

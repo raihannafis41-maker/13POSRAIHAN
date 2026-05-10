@@ -94,27 +94,26 @@
 
                 {{-- MEJA --}}
                 <div class="form-group mb-3">
+                    <label>Meja <span class="text-danger">*</span></label>
 
-                    <label>Meja</label>
-                    <select name="mejaid" class="form-control">
+                    <select name="mejaid"
+                        class="form-control @error('mejaid') is-invalid @enderror"
+                        required>
 
-                        <option value="">
-                            -- Pilih Meja --
-                        </option>
+                        <option value="">-- Pilih Meja --</option>
 
                         @foreach($meja as $m)
-
-                        <option value="{{ $m->id }}">
-
-                            {{ $m->nomormeja }}
-                            - Kapasitas {{ $m->kapasitas }}
-
+                        <option value="{{ $m->id }}" {{ old('mejaid') == $m->id ? 'selected' : '' }}>
+                            {{ $m->nomormeja }} - Kapasitas {{ $m->kapasitas }}
                         </option>
-
                         @endforeach
-
                     </select>
 
+                    @error('mejaid')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
+                    @enderror
                 </div>
 
                 {{-- METODE PEMBAYARAN --}}

@@ -33,7 +33,7 @@
             </div>
 
             <div class="col-lg-6 text-center" data-aos="fade-left">
-                <img src="{{ asset('foto/banner/about.png') }}" class="img-fluid rounded-4 shadow-lg" alt="Tentang CAFEPOS">
+                <img src="{{ asset('foto/banner/cafe.jpeg') }}" class="img-fluid rounded-4 shadow-lg" alt="Tentang CAFEPOS">
             </div>
         </div>
 

@@ -317,6 +317,8 @@ CAFEPOS/
 │   │   │   │   ├── index.blade.php
 │   │   │   │   ├── pembayaran.blade.php
 │   │   │   │   ├── sukses.blade.php
+│   │   │   │   ├── showstruk.blade.php
+│   │   │   │   ├── strukprint.blade.php
 │   │   │   │   └── struk.blade.php
 │   │   │   ├── shift/
 │   │   │   │   ├── bukashift.blade.php

@@ -112,7 +112,7 @@ class ControllerRiwayatKasir extends Controller
         $data = $query->paginate(10);
 
         return view(
-            'transaksi.riwayat.index',
+            'admin.riwayat.index',
             compact('data')
         );
     }
@@ -135,7 +135,7 @@ class ControllerRiwayatKasir extends Controller
             ->findOrFail($id);
 
         return view(
-            'transaksi.riwayat.show',
+            'admin.riwayat.show',
             compact('data')
         );
     }

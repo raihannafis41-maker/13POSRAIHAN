@@ -42,7 +42,7 @@
 
                                 <div style="width: 250px;">
                                     <input type="text" id="searchProduk" class="form-control form-control-sm"
-                                           placeholder="Cari produk...">
+                                        placeholder="Cari produk...">
                                 </div>
                             </div>
                         </div>
@@ -52,13 +52,23 @@
                             <div class="row" id="produkContainer">
                                 @foreach($produk as $p)
                                 <div class="col-lg-4 col-md-6 col-sm-6 mb-3 produk-item"
-                                     data-nama="{{ strtolower($p->namaproduk) }}">
+                                    data-nama="{{ strtolower($p->namaproduk) }}">
 
                                     <div class="card shadow-sm border-0 rounded-lg h-100">
                                         <div class="card-body text-center">
 
                                             <div class="mb-2">
-                                                <i class="fas fa-mug-hot fa-2x text-primary"></i>
+                                                @if($p->foto)
+                                                <img src="{{ asset('storage/' . $p->foto) }}"
+                                                    class="img-fluid rounded"
+                                                    style="height:120px; width:100%; object-fit:cover;"
+                                                    alt="Foto Produk">
+                                                @else
+                                                <img src="{{ asset('foto/defaultproduk.png') }}"
+                                                    class="img-fluid rounded"
+                                                    style="height:120px; width:100%; object-fit:cover;"
+                                                    alt="Default Produk">
+                                                @endif
                                             </div>
 
                                             <h6 class="fw-bold mb-1">{{ $p->namaproduk }}</h6>
@@ -100,15 +110,15 @@
                         <div class="card-body">
 
                             @if(session('error'))
-                                <div class="alert alert-danger">
-                                    <i class="fas fa-exclamation-triangle"></i> {{ session('error') }}
-                                </div>
+                            <div class="alert alert-danger">
+                                <i class="fas fa-exclamation-triangle"></i> {{ session('error') }}
+                            </div>
                             @endif
 
                             @if(session('success'))
-                                <div class="alert alert-success">
-                                    <i class="fas fa-check-circle"></i> {{ session('success') }}
-                                </div>
+                            <div class="alert alert-success">
+                                <i class="fas fa-check-circle"></i> {{ session('success') }}
+                            </div>
                             @endif
 
                             <div class="table-responsive">
@@ -189,11 +199,11 @@
 
 {{-- SEARCH SCRIPT --}}
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function() {
         const searchInput = document.getElementById("searchProduk");
         const produkItems = document.querySelectorAll(".produk-item");
 
-        searchInput.addEventListener("keyup", function () {
+        searchInput.addEventListener("keyup", function() {
             const keyword = searchInput.value.toLowerCase();
 
             produkItems.forEach(item => {

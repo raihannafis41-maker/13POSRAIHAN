@@ -24,9 +24,20 @@ class ControllerPembelian extends Controller
         return "admin.inventory.pembelian.$file";
     }
 
+    // GENERATE KODE PEMBELIAN OTOMATIS
+    private function generateKodePembelian()
+    {
+        $last = ModelPembelian::orderBy('id', 'desc')->first();
+        $nextNumber = $last ? $last->id + 1 : 1;
+
+        return 'PB-' . date('Ymd') . '-' . str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
+    }
+
     public function index()
     {
-        $data = ModelPembelian::latest()->get();
+        $data = ModelPembelian::with('supplier', 'user')
+            ->orderBy('id', 'desc')
+            ->get();
 
         return view(
             $this->viewPath('index'),
@@ -36,8 +47,8 @@ class ControllerPembelian extends Controller
 
     public function create()
     {
-        $supplier = ModelSupplier::all();
-        $bahanbaku = ModelBahanBaku::all();
+        $supplier = ModelSupplier::orderBy('id', 'desc')->get();
+        $bahanbaku = ModelBahanBaku::orderBy('id', 'desc')->get();
 
         return view(
             $this->viewPath('create'),
@@ -49,12 +60,16 @@ class ControllerPembelian extends Controller
     {
         $request->validate([
             'supplierid' => 'required',
-            'tanggalpembelian' => 'required',
-            'total' => 'required|numeric'
+            'tanggalpembelian' => 'required|date',
+            'total' => 'required|numeric|min:0'
         ]);
 
+        $kode = $this->generateKodePembelian();
+
         $pembelian = ModelPembelian::create([
+            'kodepembelian' => $kode,
             'supplierid' => $request->supplierid,
+            'userid' => Auth::id(),
             'tanggalpembelian' => $request->tanggalpembelian,
             'total' => $request->total,
         ]);
@@ -66,12 +81,12 @@ class ControllerPembelian extends Controller
 
     public function show($id)
     {
-        $pembelian = ModelPembelian::findOrFail($id);
+        $pembelian = ModelPembelian::with('supplier', 'user')
+            ->findOrFail($id);
 
-        $detail = ModelDetailPembelian::where(
-            'pembelianid',
-            $id
-        )->get();
+        $detail = ModelDetailPembelian::with('bahanbaku')
+            ->where('pembelianid', $id)
+            ->get();
 
         return view(
             $this->viewPath('show'),
@@ -82,7 +97,6 @@ class ControllerPembelian extends Controller
     public function edit($id)
     {
         $pembelian = ModelPembelian::findOrFail($id);
-
         $supplier = ModelSupplier::all();
 
         return view(
@@ -95,8 +109,8 @@ class ControllerPembelian extends Controller
     {
         $request->validate([
             'supplierid' => 'required',
-            'tanggalpembelian' => 'required',
-            'total' => 'required|numeric'
+            'tanggalpembelian' => 'required|date',
+            'total' => 'required|numeric|min:0'
         ]);
 
         $pembelian = ModelPembelian::findOrFail($id);
@@ -115,6 +129,9 @@ class ControllerPembelian extends Controller
     public function destroy($id)
     {
         $pembelian = ModelPembelian::findOrFail($id);
+
+        // hapus detail pembelian dulu supaya aman (kalau ada foreign key)
+        ModelDetailPembelian::where('pembelianid', $id)->delete();
 
         $pembelian->delete();
 

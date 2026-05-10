@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Master;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 use App\Models\ModelProduk;
 use App\Models\ModelKategori;
@@ -34,7 +35,15 @@ class ControllerProduk extends Controller
             'namaproduk' => 'required',
             'hargajual' => 'required|numeric',
             'satuan' => 'required',
+            'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'status' => 'required|in:aktif,nonaktif'
         ]);
+
+        $fotoPath = null;
+
+        if ($request->hasFile('foto')) {
+            $fotoPath = $request->file('foto')->store('produk', 'public');
+        }
 
         ModelProduk::create([
             'kategoriid' => $request->kategoriid,
@@ -42,8 +51,8 @@ class ControllerProduk extends Controller
             'namaproduk' => $request->namaproduk,
             'hargajual' => $request->hargajual,
             'satuan' => $request->satuan,
-            'foto' => null,
-            'status' => 'aktif',
+            'foto' => $fotoPath,
+            'status' => $request->status,
         ]);
 
         return redirect()
@@ -62,7 +71,6 @@ class ControllerProduk extends Controller
     public function edit($id)
     {
         $data = ModelProduk::findOrFail($id);
-
         $kategori = ModelKategori::all();
 
         return view('admin.produk.edit', compact('data', 'kategori'));
@@ -78,17 +86,31 @@ class ControllerProduk extends Controller
             'namaproduk' => 'required',
             'hargajual' => 'required|numeric',
             'satuan' => 'required',
-            'status' => 'required',
+            'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'status' => 'required|in:aktif,nonaktif',
         ]);
 
-        $data->update([
+        $updateData = [
             'kategoriid' => $request->kategoriid,
             'kodeproduk' => $request->kodeproduk,
             'namaproduk' => $request->namaproduk,
             'hargajual' => $request->hargajual,
             'satuan' => $request->satuan,
             'status' => $request->status,
-        ]);
+        ];
+
+        // upload foto baru
+        if ($request->hasFile('foto')) {
+
+            // hapus foto lama
+            if ($data->foto && Storage::disk('public')->exists($data->foto)) {
+                Storage::disk('public')->delete($data->foto);
+            }
+
+            $updateData['foto'] = $request->file('foto')->store('produk', 'public');
+        }
+
+        $data->update($updateData);
 
         return redirect()
             ->route('master.produk.index')
@@ -98,6 +120,11 @@ class ControllerProduk extends Controller
     public function destroy($id)
     {
         $data = ModelProduk::findOrFail($id);
+
+        // hapus foto produk jika ada
+        if ($data->foto && Storage::disk('public')->exists($data->foto)) {
+            Storage::disk('public')->delete($data->foto);
+        }
 
         $data->delete();
 

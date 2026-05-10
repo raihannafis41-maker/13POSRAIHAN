@@ -17,15 +17,15 @@
 
         {{-- ALERT --}}
         @if(session('success'))
-            <div class="alert alert-success">
-                <i class="fas fa-check-circle"></i> {{ session('success') }}
-            </div>
+        <div class="alert alert-success">
+            <i class="fas fa-check-circle"></i> {{ session('success') }}
+        </div>
         @endif
 
         @if(session('error'))
-            <div class="alert alert-danger">
-                <i class="fas fa-times-circle"></i> {{ session('error') }}
-            </div>
+        <div class="alert alert-danger">
+            <i class="fas fa-times-circle"></i> {{ session('error') }}
+        </div>
         @endif
 
         {{-- SEARCH --}}
@@ -60,10 +60,12 @@
 
                     <td class="text-center">
                         @if($row->foto)
-                            <img src="{{ asset('storage/' . $row->foto) }}" width="45" height="45"
-                                class="rounded-circle" style="object-fit: cover;">
+                        <img src="{{ asset('storage/' . $row->foto) }}"
+                            width="70" height="70"
+                            class="img-thumbnail"
+                            style="object-fit:cover; border-radius:8px;">
                         @else
-                            <span class="text-muted">-</span>
+                        <span class="text-muted">-</span>
                         @endif
                     </td>
 
@@ -73,19 +75,19 @@
 
                     <td class="text-center">
                         @if($row->role == 'owner')
-                            <span class="badge badge-danger">OWNER</span>
+                        <span class="badge badge-danger">OWNER</span>
                         @elseif($row->role == 'manager')
-                            <span class="badge badge-warning">MANAGER</span>
+                        <span class="badge badge-warning">MANAGER</span>
                         @else
-                            <span class="badge badge-info">KASIR</span>
+                        <span class="badge badge-info">KASIR</span>
                         @endif
                     </td>
 
                     <td class="text-center">
                         @if($row->isactive == 1)
-                            <span class="badge badge-success">AKTIF</span>
+                        <span class="badge badge-success">AKTIF</span>
                         @else
-                            <span class="badge badge-secondary">NONAKTIF</span>
+                        <span class="badge badge-secondary">NONAKTIF</span>
                         @endif
                     </td>
 

@@ -20,31 +20,63 @@
                         <i class="fa-solid fa-envelope"></i> Kirim Pesan
                     </h4>
 
-                    <form action="#" method="POST">
+                    <form action="{{ route('landing.kontak.store') }}" method="POST">
                         @csrf
+
+                        {{-- ALERT --}}
+                        @if(session('success'))
+                        <div class="alert alert-success">
+                            <i class="fa-solid fa-circle-check"></i> {{ session('success') }}
+                        </div>
+                        @endif
+
+                        @if($errors->any())
+                        <div class="alert alert-danger">
+                            <i class="fa-solid fa-circle-xmark"></i> Data belum valid!
+                        </div>
+                        @endif
 
                         <div class="mb-3">
                             <label class="form-label">Nama</label>
-                            <input type="text" name="nama" class="form-control bg-dark text-white border-0"
-                                   placeholder="Masukkan nama anda" required>
+                            <input type="text" name="nama"
+                                value="{{ old('nama') }}"
+                                class="form-control bg-dark text-white border-0 @error('nama') is-invalid @enderror"
+                                placeholder="Masukkan nama anda" required>
+                            @error('nama')
+                            <small class="text-danger">{{ $message }}</small>
+                            @enderror
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label">Email</label>
-                            <input type="email" name="email" class="form-control bg-dark text-white border-0"
-                                   placeholder="Masukkan email anda" required>
+                            <input type="email" name="email"
+                                value="{{ old('email') }}"
+                                class="form-control bg-dark text-white border-0 @error('email') is-invalid @enderror"
+                                placeholder="Masukkan email anda" required>
+                            @error('email')
+                            <small class="text-danger">{{ $message }}</small>
+                            @enderror
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label">Subjek</label>
-                            <input type="text" name="subjek" class="form-control bg-dark text-white border-0"
-                                   placeholder="Masukkan subjek" required>
+                            <input type="text" name="subjek"
+                                value="{{ old('subjek') }}"
+                                class="form-control bg-dark text-white border-0 @error('subjek') is-invalid @enderror"
+                                placeholder="Masukkan subjek" required>
+                            @error('subjek')
+                            <small class="text-danger">{{ $message }}</small>
+                            @enderror
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label">Pesan</label>
-                            <textarea name="pesan" rows="5" class="form-control bg-dark text-white border-0"
-                                      placeholder="Tulis pesan anda..." required></textarea>
+                            <textarea name="pesan" rows="5"
+                                class="form-control bg-dark text-white border-0 @error('pesan') is-invalid @enderror"
+                                placeholder="Tulis pesan anda..." required>{{ old('pesan') }}</textarea>
+                            @error('pesan')
+                            <small class="text-danger">{{ $message }}</small>
+                            @enderror
                         </div>
 
                         <button type="submit" class="btn btn-gradient px-4 py-2 rounded-pill">

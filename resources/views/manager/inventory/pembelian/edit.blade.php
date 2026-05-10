@@ -31,12 +31,12 @@
 
                     @foreach($supplier as $s)
 
-                        <option value="{{ $s->id }}"
-                            {{ $pembelian->supplierid == $s->id ? 'selected' : '' }}>
+                    <option value="{{ $s->id }}"
+                        {{ $pembelian->supplierid == $s->id ? 'selected' : '' }}>
 
-                            {{ $s->namasupplier }}
+                        {{ $s->namasupplier }}
 
-                        </option>
+                    </option>
 
                     @endforeach
 
@@ -79,7 +79,10 @@
         </div>
 
     </form>
-
+    <a href="{{ route('inventory.pembelian.index') }}"
+        class="btn btn-secondary">
+        Kembali
+    </a>
 </div>
 
 @endsection

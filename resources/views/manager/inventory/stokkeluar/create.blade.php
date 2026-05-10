@@ -13,7 +13,7 @@
     <div class="card-body">
 
         <form action="{{ route('inventory.stokkeluar.store') }}"
-              method="POST">
+            method="POST">
 
             @csrf
 
@@ -22,13 +22,13 @@
                 <label>Bahan Baku</label>
 
                 <select name="bahanbakuid"
-                        class="form-control">
+                    class="form-control">
 
                     @foreach($bahanbaku as $item)
 
-                        <option value="{{ $item->id }}">
-                            {{ $item->namabahan }}
-                        </option>
+                    <option value="{{ $item->id }}">
+                        {{ $item->namabahan }}
+                    </option>
 
                     @endforeach
 
@@ -41,8 +41,8 @@
                 <label>Jumlah</label>
 
                 <input type="number"
-                       name="jumlah"
-                       class="form-control">
+                    name="jumlah"
+                    class="form-control">
 
             </div>
 
@@ -51,8 +51,8 @@
                 <label>Tanggal Keluar</label>
 
                 <input type="date"
-                       name="tanggalkeluar"
-                       class="form-control">
+                    name="tanggalkeluar"
+                    class="form-control">
 
             </div>
 
@@ -61,7 +61,7 @@
                 <label>Alasan</label>
 
                 <textarea name="alasan"
-                          class="form-control"></textarea>
+                    class="form-control"></textarea>
 
             </div>
 
@@ -72,7 +72,10 @@
         </form>
 
     </div>
-
+    <a href="{{ route('inventory.stokkeluar.index') }}"
+        class="btn btn-secondary">
+        Kembali
+    </a>
 </div>
 
 @endsection

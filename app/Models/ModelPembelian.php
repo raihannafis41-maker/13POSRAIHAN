@@ -12,6 +12,7 @@ class ModelPembelian extends Model
     protected $table = 'pembelian';
 
     protected $fillable = [
+        'kodepembelian',
         'supplierid',
         'userid',
         'total',

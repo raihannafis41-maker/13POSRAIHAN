@@ -14,42 +14,47 @@ class ControllerCetakStruk extends Controller
     public function index()
     {
         $data = ModelPenjualan::orderBy('id', 'desc')->get();
+
         return view('kasir.pos.showstruk', compact('data'));
     }
 
-    public function show($id)
-    {
-        $penjualan = ModelPenjualan::findOrFail($id);
+ public function show($id)
+{
+    $penjualan = ModelPenjualan::with([
+        'detailpenjualan.produk',
+        'pembayaran.metode'
+    ])->findOrFail($id);
 
-        $detail = ModelDetailPenjualan::where('penjualanid', $id)->get();
+    $detail = $penjualan->detailpenjualan;
+    $pembayaran = $penjualan->pembayaran;
 
-        $pembayaran = ModelPembayaran::where('penjualanid', $id)->first();
+    return view('kasir.pos.struk', compact(
+        'penjualan',
+        'detail',
+        'pembayaran'
+    ));
+}
 
-        return view('kasir.pos.struk', compact(
-            'penjualan',
-            'detail',
-            'pembayaran'
-        ));
-    }
+public function print($id)
+{
+    $penjualan = ModelPenjualan::with([
+        'detailpenjualan.produk',
+        'pembayaran.metode'
+    ])->findOrFail($id);
 
-    public function print($id)
-    {
-        $penjualan = ModelPenjualan::findOrFail($id);
+    ModelCetakStruk::create([
+        'penjualanid'  => $penjualan->id,
+        'strukfile'    => null,
+        'tanggalcetak' => Carbon::now(),
+    ]);
 
-        // simpan log cetak ke database
-        ModelCetakStruk::create([
-            'penjualanid'  => $penjualan->id,
-            'strukfile'    => null,
-            'tanggalcetak' => Carbon::now(),
-        ]);
+    $detail = $penjualan->detailpenjualan;
+    $pembayaran = $penjualan->pembayaran;
 
-        $detail = ModelDetailPenjualan::where('penjualanid', $id)->get();
-        $pembayaran = ModelPembayaran::where('penjualanid', $id)->first();
-
-        return view('kasir.pos.strukprint', compact(
-            'penjualan',
-            'detail',
-            'pembayaran'
-        ));
-    }
+    return view('kasir.pos.strukprint', compact(
+        'penjualan',
+        'detail',
+        'pembayaran'
+    ));
+}
 }

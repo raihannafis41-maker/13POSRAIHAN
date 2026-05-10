@@ -13,7 +13,7 @@
     <div class="card-body">
 
         <form action="{{ route('inventory.stokkeluar.update', $data->id) }}"
-              method="POST">
+            method="POST">
 
             @csrf
             @method('PUT')
@@ -23,16 +23,16 @@
                 <label>Bahan Baku</label>
 
                 <select name="bahanbakuid"
-                        class="form-control">
+                    class="form-control">
 
                     @foreach($bahanbaku as $item)
 
-                        <option value="{{ $item->id }}"
-                            {{ $data->bahanbakuid == $item->id ? 'selected' : '' }}>
+                    <option value="{{ $item->id }}"
+                        {{ $data->bahanbakuid == $item->id ? 'selected' : '' }}>
 
-                            {{ $item->namabahan }}
+                        {{ $item->namabahan }}
 
-                        </option>
+                    </option>
 
                     @endforeach
 
@@ -45,9 +45,9 @@
                 <label>Jumlah</label>
 
                 <input type="number"
-                       name="jumlah"
-                       value="{{ $data->jumlah }}"
-                       class="form-control">
+                    name="jumlah"
+                    value="{{ $data->jumlah }}"
+                    class="form-control">
 
             </div>
 
@@ -56,9 +56,9 @@
                 <label>Tanggal Keluar</label>
 
                 <input type="date"
-                       name="tanggalkeluar"
-                       value="{{ $data->tanggalkeluar }}"
-                       class="form-control">
+                    name="tanggalkeluar"
+                    value="{{ $data->tanggalkeluar }}"
+                    class="form-control">
 
             </div>
 
@@ -67,7 +67,7 @@
                 <label>Alasan</label>
 
                 <textarea name="alasan"
-                          class="form-control">{{ $data->alasan }}</textarea>
+                    class="form-control">{{ $data->alasan }}</textarea>
 
             </div>
 
@@ -78,7 +78,10 @@
         </form>
 
     </div>
-
+    <a href="{{ route('inventory.stokkeluar.index') }}"
+        class="btn btn-secondary">
+        Kembali
+    </a>
 </div>
 
 @endsection
