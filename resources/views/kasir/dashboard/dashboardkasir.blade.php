@@ -3,7 +3,6 @@
 @section('title', 'Dashboard Kasir')
 
 @section('content')
-<div class="content-wrapper">
 
     {{-- HEADER --}}
     <section class="content-header pb-2">
@@ -290,5 +289,4 @@
         </div>
     </section>
 
-</div>
 @endsection
